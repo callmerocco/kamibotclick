@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LinkSwift | Professional Link Hub</title>
+    <title>LinkSwift | Professional Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
-                    colors: { brand: '#3b82f6' }
                 }
             }
         }
@@ -19,20 +18,24 @@
     <style type="text/tailwindcss">
         @layer utilities {
             .glass { @apply bg-slate-900/60 backdrop-blur-xl border border-white/10; }
-            .btn-gradient { @apply bg-gradient-to-br from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 transition-all shadow-lg shadow-blue-500/20; }
+            .btn-primary { @apply bg-gradient-to-br from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 transition-all shadow-lg shadow-blue-500/20; }
+            .toast-enter { @apply translate-y-0 opacity-100; }
+            .toast-exit { @apply -translate-y-12 opacity-0; }
         }
     </style>
 </head>
-<body class="min-h-screen bg-[#020617] text-slate-100">
+<body class="min-h-screen bg-[#020617] text-slate-100 overflow-x-hidden">
+
+    <div id="toast-container" class="fixed top-6 left-1/2 -translate-x-1/2 z-[200] flex flex-col items-center gap-3 w-full max-w-sm pointer-events-none"></div>
 
     <div id="authOverlay" class="fixed inset-0 z-[100] glass flex items-center justify-center p-6 transition-opacity duration-500">
         <div class="bg-slate-900 p-8 rounded-[2.5rem] w-full max-w-md border border-white/10 shadow-2xl text-center">
             <h2 class="text-4xl font-black mb-2 tracking-tighter">LinkSwift</h2>
-            <p class="text-slate-500 mb-8 text-sm">Monetize and manage your links securely.</p>
+            <p class="text-slate-500 mb-8 text-sm font-semibold uppercase tracking-widest">Secure Access Protocol</p>
             
-            <button onclick="loginGoogle()" class="w-full bg-white text-black font-extrabold py-4 rounded-2xl flex items-center justify-center gap-3 mb-4 hover:bg-slate-200 transition-all active:scale-95">
+            <button onclick="loginGoogle()" class="w-full bg-white text-black font-extrabold py-4 rounded-2xl flex items-center justify-center gap-3 mb-4 hover:bg-slate-100 transition-all active:scale-95">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5">
-                Google Account
+                Continue with Google
             </button>
 
             <div class="relative my-8 text-center">
@@ -41,48 +44,45 @@
             </div>
 
             <input type="email" id="authEmail" placeholder="Email Address" class="w-full bg-slate-800/50 p-4 rounded-xl mb-3 border border-white/5 outline-none focus:border-blue-500 transition-all">
-            <input type="password" id="authPass" placeholder="Password" class="w-full bg-slate-800/50 p-4 rounded-xl mb-6 border border-white/5 outline-none focus:border-blue-500 transition-all">
+            <input type="password" id="authPass" placeholder="Password" class="w-full bg-slate-800/50 p-4 rounded-xl mb-6 border border-white/5 outline-none focus:border-blue-500 transition-all text-white">
             
             <div class="flex gap-3">
-                <button onclick="loginEmail()" class="flex-1 btn-gradient py-4 rounded-xl font-bold active:scale-95 transition-transform">Login</button>
-                <button onclick="registerEmail()" class="flex-1 bg-slate-800 hover:bg-slate-700 py-4 rounded-xl font-bold active:scale-95 transition-transform">Sign Up</button>
+                <button onclick="loginEmail()" class="flex-1 btn-primary py-4 rounded-xl font-bold active:scale-95">Login</button>
+                <button onclick="registerEmail()" class="flex-1 bg-slate-800 hover:bg-slate-700 py-4 rounded-xl font-bold active:scale-95">Sign Up</button>
             </div>
         </div>
     </div>
 
     <nav class="p-6 flex justify-between items-center max-w-6xl mx-auto">
-        <div class="text-2xl font-black tracking-tighter">LINK<span class="text-blue-500 uppercase">swift</span></div>
+        <div class="text-2xl font-black tracking-tighter">LINK<span class="text-blue-500">SWIFT</span></div>
         <div id="userProfile" class="hidden flex items-center gap-4">
-            <span id="userDisplay" class="text-xs font-bold text-slate-500 hidden sm:inline"></span>
-            <button onclick="logout()" class="text-[10px] bg-red-500/10 text-red-500 px-4 py-2 rounded-full font-black uppercase tracking-widest border border-red-500/20 hover:bg-red-500 hover:text-white transition-all">Logout</button>
+            <span id="userDisplay" class="text-[10px] font-black text-slate-500 uppercase tracking-widest bg-white/5 px-3 py-1 rounded-md"></span>
+            <button onclick="logout()" class="text-[10px] text-red-400 font-black uppercase tracking-widest hover:text-red-300 transition-colors">Logout</button>
         </div>
     </nav>
 
     <main id="mainContent" class="hidden max-w-4xl mx-auto px-6 py-12">
         <div class="glass p-2 rounded-[2rem] mb-12 shadow-2xl">
             <div class="flex flex-col md:flex-row gap-2">
-                <input type="url" id="longUrl" placeholder="Paste your destination URL here..." class="bg-transparent p-5 flex-1 outline-none text-white font-medium">
-                <button onclick="createLink()" class="btn-gradient px-12 py-5 rounded-[1.5rem] font-black uppercase tracking-widest">Create</button>
+                <input type="url" id="longUrl" placeholder="Enter high-traffic destination URL..." class="bg-transparent p-5 flex-1 outline-none text-white font-medium">
+                <button onclick="createLink()" class="btn-primary px-12 py-5 rounded-[1.5rem] font-black uppercase tracking-widest active:scale-95">Shorten</button>
             </div>
         </div>
 
         <div class="flex items-center justify-between mb-8 px-2">
-            <h3 class="text-xl font-black flex items-center gap-3 uppercase tracking-tighter">
-                <span class="h-2 w-2 rounded-full bg-blue-500 animate-pulse"></span>
-                My Management Hub
-            </h3>
+            <h3 class="text-xl font-black uppercase tracking-tighter">My Active Protocols</h3>
         </div>
 
         <div id="linksContainer" class="grid gap-4">
-            <div class="text-center py-20 opacity-20 font-black uppercase tracking-[0.3em] text-sm">Initializing Protocol...</div>
-        </div>
+            </div>
     </main>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, setDoc, query, where, onSnapshot, doc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, setDoc, query, where, onSnapshot, doc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // CONFIG
         const firebaseConfig = { 
             apiKey: "AIzaSyAuTU6BV_uxz56NYiJioV2NJ7Wk_wMhL0g",
             authDomain: "kamibotclick.firebaseapp.com",
@@ -97,7 +97,29 @@
         const db = getFirestore(app);
         let currentUser = null;
 
-        // AUTH HANDLERS
+        // --- TOAST NOTIFICATION LOGIC ---
+        window.showToast = (message, type = 'info') => {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `bg-white text-slate-900 px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4 border border-slate-200 pointer-events-auto transition-all duration-500 opacity-0 -translate-y-8`;
+            
+            const icon = type === 'error' ? '✕' : '✓';
+            const iconColor = type === 'error' ? 'text-red-500' : 'text-blue-500';
+
+            toast.innerHTML = `
+                <div class="font-black text-lg ${iconColor}">${icon}</div>
+                <div class="text-[11px] font-black uppercase tracking-widest text-slate-800">${message}</div>
+            `;
+
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.remove('opacity-0', '-translate-y-8'), 10);
+            setTimeout(() => {
+                toast.classList.add('opacity-0', '-translate-y-8');
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        };
+
+        // --- AUTH FLOW ---
         onAuthStateChanged(auth, (user) => {
             const overlay = document.getElementById('authOverlay');
             const main = document.getElementById('mainContent');
@@ -105,50 +127,49 @@
 
             if (user) {
                 currentUser = user;
-                overlay.style.opacity = '0';
-                setTimeout(() => overlay.classList.add('hidden'), 500);
+                overlay.classList.add('hidden');
                 main.classList.remove('hidden');
                 profile.classList.remove('hidden');
                 document.getElementById('userDisplay').innerText = user.email;
                 loadLinks();
             } else {
                 overlay.classList.remove('hidden');
-                overlay.style.opacity = '1';
                 main.classList.add('hidden');
                 profile.classList.add('hidden');
             }
         });
 
-        window.loginGoogle = () => signInWithPopup(auth, new GoogleAuthProvider());
-        window.loginEmail = () => signInWithEmailAndPassword(auth, authEmail.value, authPass.value).catch(err => alert(err.message));
-        window.registerEmail = () => createUserWithEmailAndPassword(auth, authEmail.value, authPass.value).catch(err => alert(err.message));
+        window.loginGoogle = () => signInWithPopup(auth, new GoogleAuthProvider()).catch(e => showToast(e.message, 'error'));
+        window.loginEmail = () => signInWithEmailAndPassword(auth, authEmail.value, authPass.value).catch(e => showToast(e.message, 'error'));
+        window.registerEmail = () => createUserWithEmailAndPassword(auth, authEmail.value, authPass.value).then(() => showToast("Account Created!")).catch(e => showToast(e.message, 'error'));
         window.logout = () => signOut(auth);
 
-        // LINK LOGIC
+        // --- LINK MANAGEMENT ---
         window.createLink = async () => {
-            const urlInput = document.getElementById('longUrl');
-            if(!urlInput.value || !currentUser) return;
+            const input = document.getElementById('longUrl');
+            if(!input.value) return showToast("Enter a URL first", "error");
+            if(!currentUser) return showToast("Authentication Required", "error");
             
             const slug = Math.random().toString(36).substring(2, 7);
             
             try {
-                // We use setDoc(doc(db, "links", slug)) so the document ID matches the slug
+                // setDoc with Slug as the ID is critical for the "go" page to find it fast
                 await setDoc(doc(db, "links", slug), {
-                    target: urlInput.value,
+                    target: input.value,
                     slug: slug,
-                    userId: currentUser.uid, // REQUIRED for Security Rules
+                    userId: currentUser.uid, 
                     clicks: 0,
                     createdAt: serverTimestamp()
                 });
-                urlInput.value = '';
+                input.value = '';
+                showToast("Link protocol generated!", "success");
             } catch (e) {
-                console.error(e);
-                alert("Permission Error. Ensure Rules allow Create.");
+                showToast("Permission Denied: Check Rules", "error");
             }
         };
 
         function loadLinks() {
-            // CRITICAL: The 'where' clause MUST match the Security Rules
+            // Filter query matches Firebase Security Rules
             const q = query(collection(db, "links"), where("userId", "==", currentUser.uid));
             
             onSnapshot(q, (snapshot) => {
@@ -156,7 +177,7 @@
                 container.innerHTML = '';
                 
                 if(snapshot.empty) {
-                    container.innerHTML = `<div class="p-12 border-2 border-dashed border-slate-800 rounded-[2rem] text-center text-slate-600 font-bold uppercase tracking-widest text-xs">No active links found.</div>`;
+                    container.innerHTML = `<div class="p-16 border-2 border-dashed border-slate-800 rounded-[2.5rem] text-center text-slate-600 font-bold uppercase tracking-widest text-[10px]">No active link protocols found in your sector.</div>`;
                     return;
                 }
 
@@ -165,34 +186,33 @@
                     const shortUrl = `${window.location.origin}/go/${data.slug}`;
                     
                     container.innerHTML += `
-                        <div class="glass p-6 rounded-[2rem] flex flex-col md:flex-row items-center justify-between gap-6 hover:border-blue-500/30 transition-all group">
+                        <div class="glass p-6 rounded-[2rem] flex flex-col md:flex-row items-center justify-between gap-6 hover:border-blue-500/30 transition-all">
                             <div class="overflow-hidden w-full">
-                                <p class="text-blue-400 font-black text-xs uppercase tracking-widest mb-1">ID: ${data.slug}</p>
-                                <p class="text-white font-bold truncate mb-1">${shortUrl}</p>
-                                <p class="text-slate-600 text-[10px] truncate uppercase font-bold tracking-tighter">Destination: ${data.target}</p>
+                                <p class="text-blue-400 font-black text-[10px] uppercase tracking-widest mb-1">Slug: ${data.slug}</p>
+                                <p class="text-white font-bold truncate mb-1 text-sm">${shortUrl}</p>
+                                <p class="text-slate-600 text-[10px] truncate uppercase font-bold tracking-tighter">${data.target}</p>
                             </div>
                             <div class="flex gap-2 w-full md:w-auto">
-                                <button onclick="copyLink('${shortUrl}')" class="flex-1 bg-white/5 hover:bg-white/10 text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all">Copy</button>
-                                <button onclick="deleteLink('${data.slug}')" class="bg-red-500/10 text-red-500 px-6 py-4 rounded-2xl border border-red-500/20 hover:bg-red-500 hover:text-white transition-all">
+                                <button onclick="copyLink('${shortUrl}')" class="flex-1 bg-white text-black px-6 py-3 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all hover:bg-blue-400">Copy</button>
+                                <button onclick="deleteLink('${data.slug}')" class="bg-red-500/10 text-red-500 px-5 py-3 rounded-xl border border-red-500/20 hover:bg-red-500 hover:text-white transition-all">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                 </button>
                             </div>
                         </div>
                     `;
                 });
-            }, (err) => {
-                console.error("Listener error:", err);
             });
         }
 
         window.copyLink = (url) => {
             navigator.clipboard.writeText(url);
-            alert("Copied to clipboard!");
+            showToast("Copied to clipboard", "success");
         };
 
         window.deleteLink = async (docId) => {
-            if(confirm("Confirm deletion of this link protocol?")) {
+            if(confirm("Permanently delete this link?")) {
                 await deleteDoc(doc(db, "links", docId));
+                showToast("Link terminated", "error");
             }
         };
     </script>
