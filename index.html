@@ -34,10 +34,17 @@
             <h2 class="text-4xl font-black mb-2 tracking-tighter uppercase">KAMI<span class="text-blue-500">BOT</span></h2>
             <p class="text-slate-500 mb-6 text-[10px] font-black uppercase tracking-[0.3em]">Access Dashboard</p>
             
-            <button id="googleBtn" disabled onclick="loginGoogle()" class="w-full bg-white text-black font-extrabold py-4 rounded-2xl flex items-center justify-center gap-3 mb-4 hover:bg-slate-100 transition-all active:scale-95 disabled:opacity-30">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5">
-                Continue with Google
-            </button>
+            <div class="grid grid-cols-2 gap-3 mb-4">
+                <button id="googleBtn" disabled onclick="loginGoogle()" class="bg-white text-black font-extrabold py-4 rounded-2xl flex items-center justify-center gap-2 hover:bg-slate-100 transition-all active:scale-95 disabled:opacity-30">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-4">
+                    Google
+                </button>
+
+                <button id="githubBtn" disabled onclick="loginGithub()" class="bg-[#24292f] text-white font-extrabold py-4 rounded-2xl flex items-center justify-center gap-2 hover:bg-[#30363d] transition-all active:scale-95 disabled:opacity-30">
+                    <img src="https://authjs.dev/img/providers/github.svg" class="w-4 invert">
+                    GitHub
+                </button>
+            </div>
 
             <div class="relative my-6 text-center text-slate-700 font-bold text-[10px] uppercase tracking-widest">
                 <hr class="border-slate-800">
@@ -89,7 +96,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, GithubAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, setDoc, query, where, onSnapshot, doc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = { 
@@ -107,7 +114,6 @@
         
         let captchaVerified = false;
 
-        // UI ACTIONS
         window.onCaptchaVerified = () => { captchaVerified = true; checkRequirements(); };
         window.onCaptchaExpired = () => { captchaVerified = false; checkRequirements(); };
 
@@ -115,9 +121,9 @@
             const legalChecked = document.getElementById('legalAgree').checked;
             const canProceed = legalChecked && captchaVerified;
             
-            document.getElementById('googleBtn').disabled = !canProceed;
-            document.getElementById('loginBtn').disabled = !canProceed;
-            document.getElementById('regBtn').disabled = !canProceed;
+            ['googleBtn', 'githubBtn', 'loginBtn', 'regBtn'].forEach(id => {
+                document.getElementById(id).disabled = !canProceed;
+            });
         };
 
         window.showToast = (msg, type = 'info') => {
@@ -130,30 +136,31 @@
             setTimeout(() => { toast.classList.add('opacity-0', '-translate-y-8'); setTimeout(()=>toast.remove(), 500); }, 3000);
         };
 
-        // AUTH
         onAuthStateChanged(auth, (user) => {
-            const overlay = document.getElementById('authOverlay');
-            const main = document.getElementById('mainContent');
-            const profile = document.getElementById('userProfile');
             if (user) {
-                overlay.classList.add('hidden');
-                main.classList.remove('hidden');
-                profile.classList.remove('hidden');
-                document.getElementById('userDisplay').innerText = user.email;
+                document.getElementById('authOverlay').classList.add('hidden');
+                document.getElementById('mainContent').classList.remove('hidden');
+                document.getElementById('userProfile').classList.remove('hidden');
+                document.getElementById('userDisplay').innerText = user.email || user.displayName;
                 loadLinks(user.uid);
             } else {
-                overlay.classList.remove('hidden');
-                main.classList.add('hidden');
-                profile.classList.add('hidden');
+                document.getElementById('authOverlay').classList.remove('hidden');
+                document.getElementById('mainContent').classList.add('hidden');
+                document.getElementById('userProfile').classList.add('hidden');
             }
         });
 
         window.loginGoogle = () => signInWithPopup(auth, new GoogleAuthProvider()).catch(e => showToast(e.message, 'error'));
+        
+        window.loginGithub = () => {
+            const provider = new GithubAuthProvider();
+            signInWithPopup(auth, provider).catch(e => showToast(e.message, 'error'));
+        };
+
         window.loginEmail = () => signInWithEmailAndPassword(auth, authEmail.value, authPass.value).catch(e => showToast(e.message, 'error'));
         window.registerEmail = () => createUserWithEmailAndPassword(auth, authEmail.value, authPass.value).catch(e => showToast(e.message, 'error'));
         window.logout = () => signOut(auth);
 
-        // DATA
         window.createLink = async () => {
             const urlInput = document.getElementById('longUrl');
             if(!urlInput.value) return showToast("Enter a URL", "error");
