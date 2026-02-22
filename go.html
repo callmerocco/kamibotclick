@@ -5,21 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Link is Ready - LinkSwift</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    </head>
+</head>
 <body class="bg-[#f8fafc] text-slate-900 min-h-screen flex flex-col items-center">
 
     <div class="w-full bg-white border-b border-slate-200 p-4 flex justify-center overflow-hidden">
         <div class="flex flex-col items-center">
             <script>
-  atOptions = {
-    'key' : '448e404a0e501735472e96bd763fedc3',
-    'format' : 'iframe',
-    'height' : 90,
-    'width' : 728,
-    'params' : {}
-  };
-</script>
-<script src="https://www.highperformanceformat.com/448e404a0e501735472e96bd763fedc3/invoke.js"></script>
+                atOptions = {
+                    'key' : '448e404a0e501735472e96bd763fedc3',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+            </script>
+            <script src="https://www.highperformanceformat.com/448e404a0e501735472e96bd763fedc3/invoke.js"></script>
         </div>
     </div>
 
@@ -50,12 +50,8 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        
-const pathSegments = window.location.pathname.split('/');
-const id = pathSegments.filter(segment => segment !== '' && segment !== 'go').pop();
 
-console.log("Detected ID:", id); // Check this in F12 console
-
+        // Firebase Setup
         const firebaseConfig = { 
             apiKey: "AIzaSyAuTU6BV_uxz56NYiJioV2NJ7Wk_wMhL0g",
             authDomain: "kamibotclick.firebaseapp.com",
@@ -68,6 +64,7 @@ console.log("Detected ID:", id); // Check this in F12 console
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // Fallback Websites
         const safeSites = [
             "https://www.wikipedia.org",
             "https://www.google.com",
@@ -75,14 +72,15 @@ console.log("Detected ID:", id); // Check this in F12 console
             "https://www.nasa.gov"
         ];
 
+        // URL ID Detection Logic
         const pathSegments = window.location.pathname.split('/');
-        const id = pathSegments.pop() || pathSegments.pop(); // Handles trailing slashes
+        const id = pathSegments.filter(s => s !== '' && s !== 'go' && s !== 'go.html').pop();
+        console.log("Detected ID:", id);
 
         async function load() {
             let targetUrl = "";
 
-            // Attempt to find link in Firebase if ID is valid
-            if (id && id !== "go" && id !== "go.html" && id !== "") {
+            if (id) {
                 try {
                     const snap = await getDoc(doc(db, "links", id));
                     if (snap.exists()) {
@@ -93,10 +91,10 @@ console.log("Detected ID:", id); // Check this in F12 console
                 }
             }
 
-            // Fallback if no ID or link not found
+            // Random Safe Site if link is missing or invalid
             if (!targetUrl) {
                 targetUrl = safeSites[Math.floor(Math.random() * safeSites.length)];
-                document.getElementById('msg').innerText = "Redirecting to a safe link...";
+                document.getElementById('msg').innerText = "Link not found. Sending you to a safe site...";
             }
 
             document.getElementById('loader').classList.add('hidden');
@@ -125,8 +123,8 @@ console.log("Detected ID:", id); // Check this in F12 console
                     btn.innerText = "Get Link";
                     
                     btn.onclick = () => {
-                        // REPLACE THIS WITH YOUR ADSTERRA DIRECT LINK
-                        window.open('https://www.google.com', '_blank'); 
+                        // REPLACE THIS WITH YOUR REAL ADSTERRA DIRECT LINK
+                        window.open('https://www.highperformanceformat.com/your-direct-link-here', '_blank'); 
                         window.location.href = target;
                     };
                 }
