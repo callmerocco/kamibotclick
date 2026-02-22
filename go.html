@@ -3,55 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Link is Ready - LinkSwift</title>
+    <title>Security Check | LinkSwift Protocol</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #0f172a; color: #f8fafc; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.1); }
+        .notification-glow { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
+        @keyframes scan { 0% { top: 0%; } 100% { top: 100%; } }
+        .scan-line { height: 2px; background: #3b82f6; position: absolute; width: 100%; animation: scan 2s linear infinite; box-shadow: 0 0 10px #3b82f6; }
+    </style>
 </head>
-<body class="bg-[#f8fafc] text-slate-900 min-h-screen flex flex-col items-center">
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
 
-    <div class="w-full bg-white border-b border-slate-200 p-4 flex justify-center overflow-hidden">
-        <div class="flex flex-col items-center">
-            <script>
-                atOptions = {
-                    'key' : '448e404a0e501735472e96bd763fedc3',
-                    'format' : 'iframe',
-                    'height' : 90,
-                    'width' : 728,
-                    'params' : {}
-                };
-            </script>
-            <script src="https://www.highperformanceformat.com/448e404a0e501735472e96bd763fedc3/invoke.js"></script>
-        </div>
+    <div class="fixed top-0 w-full bg-[#020617] p-2 flex justify-center border-b border-slate-800 z-50">
+        <script type="text/javascript">
+            atOptions = { 'key' : '448e404a0e501735472e96bd763fedc3', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
+        </script>
+        <script src="https://www.highperformanceformat.com/448e404a0e501735472e96bd763fedc3/invoke.js"></script>
     </div>
 
-    <div class="flex-1 flex flex-col items-center justify-center w-full px-6">
-        <div id="loader" class="text-center animate-pulse">
-            <p class="text-slate-400">Verifying link...</p>
-        </div>
-
-        <div id="ad-container" class="bg-white p-8 md:p-12 rounded-3xl shadow-xl max-w-md w-full text-center border border-slate-100 hidden">
-            <h2 id="msg" class="text-xl font-bold text-slate-800 mb-8 italic">Your link is being prepared...</h2>
-            
-            <div class="relative w-32 h-32 mx-auto mb-10">
-                <svg class="w-full h-full transform -rotate-90">
-                    <circle cx="64" cy="64" r="60" stroke="#e2e8f0" stroke-width="8" fill="transparent"/>
-                    <circle id="bar" cx="64" cy="64" r="60" stroke="#3b82f6" stroke-width="8" fill="transparent" 
-                            stroke-dasharray="377" stroke-dashoffset="0" class="transition-all duration-1000 ease-linear"/>
-                </svg>
-                <div id="timer" class="absolute inset-0 flex items-center justify-center text-4xl font-black text-slate-800">10</div>
+    <div class="w-full max-w-lg mt-24">
+        
+        <div class="glass notification-glow rounded-3xl overflow-hidden mb-6">
+            <div class="bg-blue-600/20 p-4 flex items-center justify-between border-b border-blue-500/30">
+                <div class="flex items-center gap-3">
+                    <div class="h-3 w-3 rounded-full bg-blue-500 animate-pulse"></div>
+                    <span class="text-xs font-black uppercase tracking-[0.2em] text-blue-400">System Notification</span>
+                </div>
+                <span class="text-[10px] mono text-slate-500">ID: LS-7729</span>
             </div>
 
-            <button id="getBtn" disabled 
-                    class="w-full bg-slate-200 text-slate-400 py-4 rounded-2xl font-black uppercase tracking-widest transition-all cursor-not-allowed">
-                Please Wait...
-            </button>
+            <div class="p-8">
+                <h1 class="text-2xl font-extrabold mb-2 text-white">Validating Secure Link...</h1>
+                <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                    Our protocol is scanning the destination for malicious scripts and tracking redirects. Please wait for the handshake to complete.
+                </p>
+
+                <div class="bg-black/40 rounded-2xl p-4 mono text-[11px] mb-8 relative overflow-hidden border border-slate-700/50">
+                    <div class="scan-line"></div>
+                    <div id="terminal" class="space-y-1 text-blue-400/80">
+                        <p>> Initializing secure_handshake.exe...</p>
+                        <p>> Requesting header tokens...</p>
+                        <p class="text-slate-600">> Waiting for user clearance...</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-center gap-8 mb-8">
+                    <div class="relative h-20 w-20">
+                        <svg class="h-20 w-20 transform -rotate-90">
+                            <circle cx="40" cy="40" r="36" stroke="#1e293b" stroke-width="6" fill="transparent"/>
+                            <circle id="progress" cx="40" cy="40" r="36" stroke="#3b82f6" stroke-width="6" fill="transparent" stroke-dasharray="226" stroke-dashoffset="226" class="transition-all duration-1000 ease-linear"/>
+                        </svg>
+                        <span id="timerText" class="absolute inset-0 flex items-center justify-center text-xl font-black text-white">10</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                            <div id="progressBar" class="h-full bg-blue-500 w-0 transition-all duration-1000"></div>
+                        </div>
+                        <p class="text-[10px] uppercase font-bold text-slate-500 mt-2 tracking-widest">Buffer Health: <span class="text-blue-400">Optimal</span></p>
+                    </div>
+                </div>
+
+                <button id="finalBtn" disabled class="w-full bg-slate-800 text-slate-500 py-5 rounded-2xl font-black uppercase tracking-widest transition-all cursor-not-allowed border border-white/5">
+                    Locked by System
+                </button>
+            </div>
         </div>
+
+        <div class="w-full h-32 glass rounded-2xl flex items-center justify-center border-dashed border-slate-700 relative overflow-hidden mb-6">
+             <span class="text-slate-600 text-[10px] font-bold uppercase tracking-[0.3em] z-10">Sponsored Content</span>
+             </div>
+
+        <p class="text-center text-slate-500 text-[10px] font-bold uppercase tracking-widest leading-loose">
+            LinkSwift Security Protocol &copy; 2026<br>
+            Encrypted End-to-End &bull; Private Access
+        </p>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // Firebase Setup
         const firebaseConfig = { 
             apiKey: "AIzaSyAuTU6BV_uxz56NYiJioV2NJ7Wk_wMhL0g",
             authDomain: "kamibotclick.firebaseapp.com",
@@ -60,78 +94,74 @@
             messagingSenderId: "112587834193",
             appId: "1:112587834193:web:c3fb8e45f24b874edf8970" 
         };
-
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Fallback Websites
-        const safeSites = [
-            "https://www.wikipedia.org",
-            "https://www.google.com",
-            "https://www.youtube.com",
-            "https://www.nasa.gov"
-        ];
+        const safeFallback = ["https://www.google.com", "https://www.wikipedia.org"];
+        const id = window.location.pathname.split('/').filter(s => s && s !== 'go').pop();
 
-        // URL ID Detection Logic
-        const pathSegments = window.location.pathname.split('/');
-        const id = pathSegments.filter(s => s !== '' && s !== 'go' && s !== 'go.html').pop();
-        console.log("Detected ID:", id);
-
-        async function load() {
-            let targetUrl = "";
-
-            if (id) {
+        async function init() {
+            let target = "";
+            if(id) {
                 try {
                     const snap = await getDoc(doc(db, "links", id));
-                    if (snap.exists()) {
-                        targetUrl = snap.data().target;
-                    }
-                } catch (e) {
-                    console.error("Database error:", e);
-                }
+                    if(snap.exists()) target = snap.data().target;
+                } catch(e) {}
             }
-
-            // Random Safe Site if link is missing or invalid
-            if (!targetUrl) {
-                targetUrl = safeSites[Math.floor(Math.random() * safeSites.length)];
-                document.getElementById('msg').innerText = "Link not found. Sending you to a safe site...";
-            }
-
-            document.getElementById('loader').classList.add('hidden');
-            document.getElementById('ad-container').classList.remove('hidden');
-            runTimer(targetUrl);
+            if(!target) target = safeFallback[Math.floor(Math.random() * safeFallback.length)];
+            
+            runTimer(target);
         }
 
-        function runTimer(target) {
-            let time = 10;
-            const bar = document.getElementById('bar');
-            const btn = document.getElementById('getBtn');
-            const timerText = document.getElementById('timer');
-            
+        function runTimer(targetUrl) {
+            let count = 10;
+            const btn = document.getElementById('finalBtn');
+            const term = document.getElementById('terminal');
+            const progress = document.getElementById('progress');
+            const bar = document.getElementById('progressBar');
+            const timerText = document.getElementById('timerText');
+
+            const log = (msg, color = "text-blue-400/80") => {
+                const p = document.createElement('p');
+                p.className = color;
+                p.innerText = `> ${msg}`;
+                term.appendChild(p);
+                if(term.childNodes.length > 4) term.removeChild(term.firstChild);
+            };
+
             const itv = setInterval(() => {
-                time--;
-                timerText.innerText = time;
-                bar.style.strokeDashoffset = 377 - (377 * (10 - time) / 10);
+                count--;
+                timerText.innerText = count;
                 
-                if(time <= 0){
+                // Visual Progress
+                const offset = 226 - (226 * (10 - count) / 10);
+                progress.style.strokeDashoffset = offset;
+                bar.style.width = `${(10-count) * 10}%`;
+
+                // Fun Terminal Logs
+                if(count === 8) log("Bypassing server firewalls...", "text-yellow-500/80");
+                if(count === 5) log("Direct tunnel established.", "text-green-500/80");
+                if(count === 2) log("Generating temporary access token...", "text-blue-300");
+
+                if(count <= 0) {
                     clearInterval(itv);
-                    document.getElementById('msg').innerText = "Ready to go!";
+                    log("SUCCESS: Link Ready.", "text-white font-bold");
+                    
                     btn.disabled = false;
-                    btn.classList.replace('bg-slate-200', 'bg-blue-600');
-                    btn.classList.replace('text-slate-400', 'text-white');
+                    btn.innerText = "Access Secured Link";
+                    btn.classList.replace('bg-slate-800', 'bg-blue-600');
+                    btn.classList.replace('text-slate-500', 'text-white');
                     btn.classList.remove('cursor-not-allowed');
-                    btn.innerText = "Get Link";
+                    btn.classList.add('hover:bg-blue-500', 'shadow-lg', 'shadow-blue-500/40');
                     
                     btn.onclick = () => {
-                        // REPLACE THIS WITH YOUR REAL ADSTERRA DIRECT LINK
-                        window.open('https://www.highperformanceformat.com/your-direct-link-here', '_blank'); 
-                        window.location.href = target;
+                        window.location.href = targetUrl;
                     };
                 }
             }, 1000);
         }
 
-        load();
+        init();
     </script>
 </body>
 </html>
