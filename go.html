@@ -5,22 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Link is Ready - LinkSwift</title>
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body 
-    class="bg-[#f8fafc] text-slate-900 min-h-screen flex flex-col items-center">
-    <script>
-  atOptions = {
-    'key' : '448e404a0e501735472e96bd763fedc3',
-    'format' : 'iframe',
-    'height' : 90,
-    'width' : 728,
-    'params' : {}
-  };
-</script>
-<script src="https://www.highperformanceformat.com/448e404a0e501735472e96bd763fedc3/invoke.js"></script>
+    </head>
+<body class="bg-[#f8fafc] text-slate-900 min-h-screen flex flex-col items-center">
+
+    <div class="w-full bg-white border-b border-slate-200 p-4 flex justify-center overflow-hidden">
+        <div class="flex flex-col items-center">
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : '448e404a0e501735472e96bd763fedc3',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="https://www.highperformanceformat.com/448e404a0e501735472e96bd763fedc3/invoke.js"></script>
+        </div>
+    </div>
 
     <div class="flex-1 flex flex-col items-center justify-center w-full px-6">
-        <div class="bg-white p-8 md:p-12 rounded-3xl shadow-xl max-w-md w-full text-center border border-slate-100">
+        <div id="loader" class="text-center animate-pulse">
+            <p class="text-slate-400">Verifying link...</p>
+        </div>
+
+        <div id="ad-container" class="bg-white p-8 md:p-12 rounded-3xl shadow-xl max-w-md w-full text-center border border-slate-100 hidden">
             <h2 id="msg" class="text-xl font-bold text-slate-800 mb-8 italic">Your link is being prepared...</h2>
             
             <div class="relative w-32 h-32 mx-auto mb-10">
@@ -43,32 +51,63 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        const firebaseConfig = { /* PASTE YOUR CONFIG HERE */ };
+        const firebaseConfig = { 
+            apiKey: "AIzaSyAuTU6BV_uxz56NYiJioV2NJ7Wk_wMhL0g",
+            authDomain: "kamibotclick.firebaseapp.com",
+            projectId: "kamibotclick",
+            storageBucket: "kamibotclick.firebasestorage.app",
+            messagingSenderId: "112587834193",
+            appId: "1:112587834193:web:c3fb8e45f24b874edf8970" 
+        };
+
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        const id = window.location.pathname.split('/').pop();
-        let target = "";
+        const safeSites = [
+            "https://www.wikipedia.org",
+            "https://www.google.com",
+            "https://www.youtube.com",
+            "https://www.nasa.gov"
+        ];
+
+        const pathSegments = window.location.pathname.split('/');
+        const id = pathSegments.pop() || pathSegments.pop(); // Handles trailing slashes
 
         async function load() {
-            const snap = await getDoc(doc(db, "links", id));
-            if(snap.exists()){
-                target = snap.data().target;
-                runTimer();
-            } else {
-                document.getElementById('msg').innerText = "Link Expired";
-                document.getElementById('timer').innerText = "!";
+            let targetUrl = "";
+
+            // Attempt to find link in Firebase if ID is valid
+            if (id && id !== "go" && id !== "go.html" && id !== "") {
+                try {
+                    const snap = await getDoc(doc(db, "links", id));
+                    if (snap.exists()) {
+                        targetUrl = snap.data().target;
+                    }
+                } catch (e) {
+                    console.error("Database error:", e);
+                }
             }
+
+            // Fallback if no ID or link not found
+            if (!targetUrl) {
+                targetUrl = safeSites[Math.floor(Math.random() * safeSites.length)];
+                document.getElementById('msg').innerText = "Redirecting to a safe link...";
+            }
+
+            document.getElementById('loader').classList.add('hidden');
+            document.getElementById('ad-container').classList.remove('hidden');
+            runTimer(targetUrl);
         }
 
-        function runTimer() {
+        function runTimer(target) {
             let time = 10;
             const bar = document.getElementById('bar');
             const btn = document.getElementById('getBtn');
+            const timerText = document.getElementById('timer');
             
             const itv = setInterval(() => {
                 time--;
-                document.getElementById('timer').innerText = time;
+                timerText.innerText = time;
                 bar.style.strokeDashoffset = 377 - (377 * (10 - time) / 10);
                 
                 if(time <= 0){
@@ -79,18 +118,17 @@
                     btn.classList.replace('text-slate-400', 'text-white');
                     btn.classList.remove('cursor-not-allowed');
                     btn.innerText = "Get Link";
+                    
                     btn.onclick = () => {
-                        // OPEN ADSTERRA DIRECT LINK IN NEW TAB
-                        window.open('YOUR_ADSTERRA_DIRECT_LINK', '_blank');
-                        // REDIRECT TO TARGET
+                        // REPLACE THIS WITH YOUR ADSTERRA DIRECT LINK
+                        window.open('https://www.google.com', '_blank'); 
                         window.location.href = target;
                     };
                 }
             }, 1000);
         }
+
         load();
     </script>
-    <script async="async" data-cfasync="false" src="https://pl28766266.effectivegatecpm.com/fab9cd7bd5da33b8370593f6ab3b3a23/invoke.js"></script>
-<div id="container-fab9cd7bd5da33b8370593f6ab3b3a23"></div>
 </body>
 </html>
