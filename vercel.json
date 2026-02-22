@@ -1,14 +1,17 @@
 {
-  "version": 2,
-  "cleanUrls": false,
+  "cleanUrls": true,
   "rewrites": [
     {
       "source": "/go/:id",
       "destination": "/go.html"
     },
     {
-      "source": "/go/:id/",
-      "destination": "/go.html"
+      "source": "/privacy",
+      "destination": "/privacy.html"
+    },
+    {
+      "source": "/tos",
+      "destination": "/tos.html"
     }
   ]
 }
