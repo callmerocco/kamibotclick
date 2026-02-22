@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Please Wait...</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script type='text/javascript' src='//your-adsterra-popunder-url.js'></script>
+</head>
+<body class="bg-slate-50 text-slate-900 flex flex-col items-center pt-12 p-4">
+
+    <div class="mb-10 w-full max-w-2xl min-h-[90px] bg-slate-200 rounded border border-slate-300 overflow-hidden flex items-center justify-center">
+        <p class="text-xs text-slate-400">Advertisement</p>
+    </div>
+
+    <div class="bg-white p-10 rounded-3xl shadow-2xl text-center max-w-sm w-full">
+        <h2 id="msg" class="text-lg font-semibold mb-6">Checking your link...</h2>
+        
+        <div class="mb-8">
+            <span id="timer" class="text-6xl font-black text-blue-600">10</span>
+        </div>
+
+        <button id="getBtn" disabled class="w-full bg-slate-300 text-slate-500 py-4 rounded-2xl font-black uppercase tracking-widest cursor-not-allowed">
+            Wait for ads...
+        </button>
+    </div>
+
+    <script type='text/javascript' src='//your-adsterra-social-bar-url.js'></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = { /* PASTE YOUR CONFIG HERE */ };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const id = window.location.pathname.split('/').pop();
+        let finalUrl = "";
+
+        async function init() {
+            const snap = await getDoc(doc(db, "links", id));
+            if (snap.exists()) {
+                finalUrl = snap.data().target;
+                startTimer();
+            } else {
+                document.getElementById('msg').innerText = "Link not found.";
+            }
+        }
+
+        function startTimer() {
+            let count = 10;
+            const t = setInterval(() => {
+                count--;
+                document.getElementById('timer').innerText = count;
+                if (count <= 0) {
+                    clearInterval(t);
+                    const btn = document.getElementById('getBtn');
+                    btn.disabled = false;
+                    btn.classList.replace('bg-slate-300', 'bg-blue-600');
+                    btn.classList.replace('text-slate-500', 'text-white');
+                    btn.classList.remove('cursor-not-allowed');
+                    btn.innerText = "Get Link Now";
+                    
+                    btn.onclick = () => {
+                        // 4. ADSTERRA DIRECT LINK (Opens ad in new tab, sends user in this tab)
+                        window.open('YOUR_ADSTERRA_DIRECT_LINK_HERE', '_blank');
+                        window.location.href = finalUrl;
+                    };
+                }
+            }, 1000);
+        }
+        init();
+    </script>
+</body>
+</html>
