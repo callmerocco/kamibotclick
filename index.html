@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LinkSwift | Professional Dashboard</title>
+    <title>KamiBot | Secure Link Protocol</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script>
         tailwind.config = {
             theme: {
@@ -18,9 +19,9 @@
     <style type="text/tailwindcss">
         @layer utilities {
             .glass { @apply bg-slate-900/60 backdrop-blur-xl border border-white/10; }
-            .btn-primary { @apply bg-gradient-to-br from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 transition-all shadow-lg shadow-blue-500/20; }
-            .toast-enter { @apply translate-y-0 opacity-100; }
-            .toast-exit { @apply -translate-y-12 opacity-0; }
+            .btn-primary { @apply bg-blue-600 hover:bg-blue-500 disabled:opacity-30 disabled:grayscale disabled:cursor-not-allowed transition-all shadow-lg shadow-blue-500/20; }
+            .checkbox-custom { @apply w-5 h-5 rounded border-2 border-slate-700 bg-slate-800 checked:bg-blue-500 checked:border-blue-500 transition-all cursor-pointer appearance-none flex items-center justify-center; }
+            .checkbox-custom:checked::after { content: '✓'; @apply text-white text-[12px] font-black; }
         }
     </style>
 </head>
@@ -30,51 +31,60 @@
 
     <div id="authOverlay" class="fixed inset-0 z-[100] glass flex items-center justify-center p-6 transition-opacity duration-500">
         <div class="bg-slate-900 p-8 rounded-[2.5rem] w-full max-w-md border border-white/10 shadow-2xl text-center">
-            <h2 class="text-4xl font-black mb-2 tracking-tighter">LinkSwift</h2>
-            <p class="text-slate-500 mb-8 text-sm font-semibold uppercase tracking-widest">Secure Access Protocol</p>
+            <h2 class="text-4xl font-black mb-2 tracking-tighter uppercase">KAMI<span class="text-blue-500">BOT</span></h2>
+            <p class="text-slate-500 mb-6 text-[10px] font-black uppercase tracking-[0.3em]">Access Dashboard</p>
             
-            <button onclick="loginGoogle()" class="w-full bg-white text-black font-extrabold py-4 rounded-2xl flex items-center justify-center gap-3 mb-4 hover:bg-slate-100 transition-all active:scale-95">
+            <button id="googleBtn" disabled onclick="loginGoogle()" class="w-full bg-white text-black font-extrabold py-4 rounded-2xl flex items-center justify-center gap-3 mb-4 hover:bg-slate-100 transition-all active:scale-95 disabled:opacity-30">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5">
                 Continue with Google
             </button>
 
-            <div class="relative my-8 text-center">
+            <div class="relative my-6 text-center text-slate-700 font-bold text-[10px] uppercase tracking-widest">
                 <hr class="border-slate-800">
-                <span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-900 px-4 text-[10px] text-slate-600 font-black uppercase tracking-[0.2em]">OR EMAIL</span>
+                <span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-900 px-4">OR EMAIL</span>
             </div>
 
             <input type="email" id="authEmail" placeholder="Email Address" class="w-full bg-slate-800/50 p-4 rounded-xl mb-3 border border-white/5 outline-none focus:border-blue-500 transition-all">
             <input type="password" id="authPass" placeholder="Password" class="w-full bg-slate-800/50 p-4 rounded-xl mb-6 border border-white/5 outline-none focus:border-blue-500 transition-all text-white">
             
-            <div class="flex gap-3">
-                <button onclick="loginEmail()" class="flex-1 btn-primary py-4 rounded-xl font-bold active:scale-95">Login</button>
-                <button onclick="registerEmail()" class="flex-1 bg-slate-800 hover:bg-slate-700 py-4 rounded-xl font-bold active:scale-95">Sign Up</button>
+            <div class="flex justify-center mb-6">
+                <div class="g-recaptcha" 
+                     data-sitekey="6LeQe3QsAAAAAK36IFKpSotRATLT4u2iNRs3t2Ah" 
+                     data-callback="onCaptchaVerified"
+                     data-expired-callback="onCaptchaExpired"
+                     data-theme="dark"></div>
+            </div>
+
+            <div class="flex gap-3 mb-8">
+                <button id="loginBtn" disabled onclick="loginEmail()" class="flex-1 btn-primary py-4 rounded-xl font-bold active:scale-95">Login</button>
+                <button id="regBtn" disabled onclick="registerEmail()" class="flex-1 bg-slate-800 hover:bg-slate-700 py-4 rounded-xl font-bold active:scale-95 disabled:opacity-30">Sign Up</button>
+            </div>
+
+            <div class="flex items-start gap-3 text-left bg-black/20 p-4 rounded-2xl border border-white/5">
+                <input type="checkbox" id="legalAgree" onchange="checkRequirements()" class="checkbox-custom mt-1">
+                <label for="legalAgree" class="text-[10px] text-slate-400 font-bold leading-relaxed uppercase tracking-wider cursor-pointer">
+                    I agree to the <a href="/privacy" class="text-blue-500 hover:underline">Privacy Policy</a> and <a href="/tos" class="text-blue-500 hover:underline">Terms</a>.
+                </label>
             </div>
         </div>
     </div>
 
     <nav class="p-6 flex justify-between items-center max-w-6xl mx-auto">
-        <div class="text-2xl font-black tracking-tighter">LINK<span class="text-blue-500">SWIFT</span></div>
+        <div class="text-2xl font-black tracking-tighter uppercase">KAMI<span class="text-blue-500">BOT</span></div>
         <div id="userProfile" class="hidden flex items-center gap-4">
             <span id="userDisplay" class="text-[10px] font-black text-slate-500 uppercase tracking-widest bg-white/5 px-3 py-1 rounded-md"></span>
-            <button onclick="logout()" class="text-[10px] text-red-400 font-black uppercase tracking-widest hover:text-red-300 transition-colors">Logout</button>
+            <button onclick="logout()" class="text-[10px] text-red-400 font-black uppercase tracking-widest hover:text-red-300">Logout</button>
         </div>
     </nav>
 
     <main id="mainContent" class="hidden max-w-4xl mx-auto px-6 py-12">
         <div class="glass p-2 rounded-[2rem] mb-12 shadow-2xl">
             <div class="flex flex-col md:flex-row gap-2">
-                <input type="url" id="longUrl" placeholder="Enter high-traffic destination URL..." class="bg-transparent p-5 flex-1 outline-none text-white font-medium">
-                <button onclick="createLink()" class="btn-primary px-12 py-5 rounded-[1.5rem] font-black uppercase tracking-widest active:scale-95">Shorten</button>
+                <input type="url" id="longUrl" placeholder="Enter destination URL..." class="bg-transparent p-5 flex-1 outline-none text-white font-medium">
+                <button onclick="createLink()" class="bg-blue-600 hover:bg-blue-500 px-12 py-5 rounded-[1.5rem] font-black uppercase tracking-widest transition-all">Create Link</button>
             </div>
         </div>
-
-        <div class="flex items-center justify-between mb-8 px-2">
-            <h3 class="text-xl font-black uppercase tracking-tighter">My Active Protocols</h3>
-        </div>
-
-        <div id="linksContainer" class="grid gap-4">
-            </div>
+        <div id="linksContainer" class="grid gap-4"></div>
     </main>
 
     <script type="module">
@@ -82,7 +92,6 @@
         import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, setDoc, query, where, onSnapshot, doc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // CONFIG
         const firebaseConfig = { 
             apiKey: "AIzaSyAuTU6BV_uxz56NYiJioV2NJ7Wk_wMhL0g",
             authDomain: "kamibotclick.firebaseapp.com",
@@ -95,43 +104,43 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        let currentUser = null;
+        
+        let captchaVerified = false;
 
-        // --- TOAST NOTIFICATION LOGIC ---
-        window.showToast = (message, type = 'info') => {
+        // UI ACTIONS
+        window.onCaptchaVerified = () => { captchaVerified = true; checkRequirements(); };
+        window.onCaptchaExpired = () => { captchaVerified = false; checkRequirements(); };
+
+        window.checkRequirements = () => {
+            const legalChecked = document.getElementById('legalAgree').checked;
+            const canProceed = legalChecked && captchaVerified;
+            
+            document.getElementById('googleBtn').disabled = !canProceed;
+            document.getElementById('loginBtn').disabled = !canProceed;
+            document.getElementById('regBtn').disabled = !canProceed;
+        };
+
+        window.showToast = (msg, type = 'info') => {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = `bg-white text-slate-900 px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4 border border-slate-200 pointer-events-auto transition-all duration-500 opacity-0 -translate-y-8`;
-            
-            const icon = type === 'error' ? '✕' : '✓';
-            const iconColor = type === 'error' ? 'text-red-500' : 'text-blue-500';
-
-            toast.innerHTML = `
-                <div class="font-black text-lg ${iconColor}">${icon}</div>
-                <div class="text-[11px] font-black uppercase tracking-widest text-slate-800">${message}</div>
-            `;
-
+            toast.innerHTML = `<div class="font-black ${type==='error'?'text-red-500':'text-blue-500'}">${type==='error'?'✕':'✓'}</div><div class="text-[10px] font-black uppercase tracking-widest">${msg}</div>`;
             container.appendChild(toast);
             setTimeout(() => toast.classList.remove('opacity-0', '-translate-y-8'), 10);
-            setTimeout(() => {
-                toast.classList.add('opacity-0', '-translate-y-8');
-                setTimeout(() => toast.remove(), 500);
-            }, 3000);
+            setTimeout(() => { toast.classList.add('opacity-0', '-translate-y-8'); setTimeout(()=>toast.remove(), 500); }, 3000);
         };
 
-        // --- AUTH FLOW ---
+        // AUTH
         onAuthStateChanged(auth, (user) => {
             const overlay = document.getElementById('authOverlay');
             const main = document.getElementById('mainContent');
             const profile = document.getElementById('userProfile');
-
             if (user) {
-                currentUser = user;
                 overlay.classList.add('hidden');
                 main.classList.remove('hidden');
                 profile.classList.remove('hidden');
                 document.getElementById('userDisplay').innerText = user.email;
-                loadLinks();
+                loadLinks(user.uid);
             } else {
                 overlay.classList.remove('hidden');
                 main.classList.add('hidden');
@@ -141,80 +150,49 @@
 
         window.loginGoogle = () => signInWithPopup(auth, new GoogleAuthProvider()).catch(e => showToast(e.message, 'error'));
         window.loginEmail = () => signInWithEmailAndPassword(auth, authEmail.value, authPass.value).catch(e => showToast(e.message, 'error'));
-        window.registerEmail = () => createUserWithEmailAndPassword(auth, authEmail.value, authPass.value).then(() => showToast("Account Created!")).catch(e => showToast(e.message, 'error'));
+        window.registerEmail = () => createUserWithEmailAndPassword(auth, authEmail.value, authPass.value).catch(e => showToast(e.message, 'error'));
         window.logout = () => signOut(auth);
 
-        // --- LINK MANAGEMENT ---
+        // DATA
         window.createLink = async () => {
-            const input = document.getElementById('longUrl');
-            if(!input.value) return showToast("Enter a URL first", "error");
-            if(!currentUser) return showToast("Authentication Required", "error");
-            
+            const urlInput = document.getElementById('longUrl');
+            if(!urlInput.value) return showToast("Enter a URL", "error");
             const slug = Math.random().toString(36).substring(2, 7);
-            
             try {
-                // setDoc with Slug as the ID is critical for the "go" page to find it fast
                 await setDoc(doc(db, "links", slug), {
-                    target: input.value,
-                    slug: slug,
-                    userId: currentUser.uid, 
-                    clicks: 0,
-                    createdAt: serverTimestamp()
+                    target: urlInput.value, slug: slug, userId: auth.currentUser.uid, clicks: 0, createdAt: serverTimestamp()
                 });
-                input.value = '';
-                showToast("Link protocol generated!", "success");
-            } catch (e) {
-                showToast("Permission Denied: Check Rules", "error");
-            }
+                urlInput.value = '';
+                showToast("Protocol Live", "success");
+            } catch (e) { showToast("Error creating link", "error"); }
         };
 
-        function loadLinks() {
-            // Filter query matches Firebase Security Rules
-            const q = query(collection(db, "links"), where("userId", "==", currentUser.uid));
-            
-            onSnapshot(q, (snapshot) => {
+        function loadLinks(uid) {
+            const q = query(collection(db, "links"), where("userId", "==", uid));
+            onSnapshot(q, (snap) => {
                 const container = document.getElementById('linksContainer');
                 container.innerHTML = '';
-                
-                if(snapshot.empty) {
-                    container.innerHTML = `<div class="p-16 border-2 border-dashed border-slate-800 rounded-[2.5rem] text-center text-slate-600 font-bold uppercase tracking-widest text-[10px]">No active link protocols found in your sector.</div>`;
-                    return;
-                }
-
-                snapshot.forEach((docSnap) => {
-                    const data = docSnap.data();
+                if(snap.empty) { container.innerHTML = `<div class="p-16 border-2 border-dashed border-slate-800 rounded-[2rem] text-center text-slate-600 font-bold uppercase tracking-widest text-[10px]">No active links.</div>`; return; }
+                snap.forEach((d) => {
+                    const data = d.data();
                     const shortUrl = `${window.location.origin}/go/${data.slug}`;
-                    
                     container.innerHTML += `
-                        <div class="glass p-6 rounded-[2rem] flex flex-col md:flex-row items-center justify-between gap-6 hover:border-blue-500/30 transition-all">
-                            <div class="overflow-hidden w-full">
-                                <p class="text-blue-400 font-black text-[10px] uppercase tracking-widest mb-1">Slug: ${data.slug}</p>
+                        <div class="glass p-6 rounded-[2rem] flex flex-col md:flex-row items-center justify-between gap-6">
+                            <div class="overflow-hidden w-full text-left">
+                                <p class="text-blue-400 font-black text-[10px] uppercase tracking-widest mb-1">${data.slug}</p>
                                 <p class="text-white font-bold truncate mb-1 text-sm">${shortUrl}</p>
                                 <p class="text-slate-600 text-[10px] truncate uppercase font-bold tracking-tighter">${data.target}</p>
                             </div>
                             <div class="flex gap-2 w-full md:w-auto">
-                                <button onclick="copyLink('${shortUrl}')" class="flex-1 bg-white text-black px-6 py-3 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all hover:bg-blue-400">Copy</button>
-                                <button onclick="deleteLink('${data.slug}')" class="bg-red-500/10 text-red-500 px-5 py-3 rounded-xl border border-red-500/20 hover:bg-red-500 hover:text-white transition-all">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                                </button>
+                                <button onclick="copyL('${shortUrl}')" class="flex-1 bg-white text-black px-6 py-3 rounded-xl font-black uppercase tracking-widest text-[10px]">Copy</button>
+                                <button onclick="delL('${data.slug}')" class="bg-red-500/10 text-red-500 px-5 py-3 rounded-xl border border-red-500/20">✕</button>
                             </div>
-                        </div>
-                    `;
+                        </div>`;
                 });
             });
         }
-
-        window.copyLink = (url) => {
-            navigator.clipboard.writeText(url);
-            showToast("Copied to clipboard", "success");
-        };
-
-        window.deleteLink = async (docId) => {
-            if(confirm("Permanently delete this link?")) {
-                await deleteDoc(doc(db, "links", docId));
-                showToast("Link terminated", "error");
-            }
-        };
+        window.copyL = (u) => { navigator.clipboard.writeText(u); showToast("Copied", "success"); };
+        window.delL = async (id) => { if(confirm("Delete link?")) { await deleteDoc(doc(db, "links", id)); showToast("Deleted", "error"); } };
     </script>
 </body>
 </html>
