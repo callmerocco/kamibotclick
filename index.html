@@ -7,37 +7,30 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
-    </script>
+    </style>
 </head>
 <body class="bg-[#0f172a] text-slate-200 font-sans min-h-screen">
     <nav class="p-6 flex justify-between items-center max-w-6xl mx-auto">
         <div class="text-2xl font-black text-white tracking-tighter">LINK<span class="text-blue-500">SWIFT</span></div>
-        <div class="hidden md:flex gap-8 text-sm font-medium text-slate-400">
-            <a href="#" class="hover:text-white transition">How it works</a>
-            <a href="#" class="hover:text-white transition">Payouts</a>
-        </div>
     </nav>
 
     <main class="max-w-4xl mx-auto pt-20 px-6 text-center">
         <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
             Turn your links into <span class="text-blue-500">Revenue.</span>
         </h1>
-        <p class="text-slate-400 text-lg mb-10 max-w-2xl mx-auto">
-            The highest paying link shortener for 2026. Get paid for every person who visits your links.
-        </p>
-
+        
         <div class="glass p-2 rounded-2xl flex flex-col md:flex-row gap-2 max-w-2xl mx-auto shadow-2xl">
-            <input type="url" id="longUrl" placeholder="Paste your long link here..." 
+            <input type="url" id="longUrl" placeholder="https://example.com" 
                    class="bg-transparent p-4 flex-1 outline-none text-white placeholder:text-slate-500">
-            <button onclick="shorten()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-4 rounded-xl transition-all active:scale-95">
+            <button onclick="shortenLink()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-4 rounded-xl transition-all">
                 Shorten Now
             </button>
         </div>
 
-        <div id="result" class="mt-8 hidden animate-in fade-in zoom-in duration-500">
+        <div id="result" class="mt-8 hidden">
             <div class="glass p-4 rounded-xl inline-flex items-center gap-4 border-blue-500/30">
                 <input type="text" id="shortUrl" readonly class="bg-transparent text-blue-400 font-mono text-sm outline-none w-64">
-                <button onclick="copy()" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest">Copy</button>
+                <button onclick="copyLink()" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg text-xs font-bold uppercase">Copy</button>
             </div>
         </div>
     </main>
@@ -46,30 +39,49 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        const firebaseConfig = {  apiKey: "AIzaSyAuTU6BV_uxz56NYiJioV2NJ7Wk_wMhL0g",
-  authDomain: "kamibotclick.firebaseapp.com",
-  projectId: "kamibotclick",
-  storageBucket: "kamibotclick.firebasestorage.app",
-  messagingSenderId: "112587834193",
-  appId: "1:112587834193:web:c3fb8e45f24b874edf8970" };
+        const firebaseConfig = {
+            apiKey: "AIzaSyAuTU6BV_uxz56NYiJioV2NJ7Wk_wMhL0g",
+            authDomain: "kamibotclick.firebaseapp.com",
+            projectId: "kamibotclick",
+            storageBucket: "kamibotclick.firebasestorage.app",
+            messagingSenderId: "112587834193",
+            appId: "1:112587834193:web:c3fb8e45f24b874edf8970"
+        };
+
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        window.shorten = async () => {
+        // We attach functions to 'window' so the HTML buttons can see them
+        window.shortenLink = async () => {
             const url = document.getElementById('longUrl').value;
-            if(!url || !url.startsWith('http')) return alert("Please enter a valid URL (include http://)");
+            if(!url || !url.startsWith('http')) {
+                alert("Please enter a valid URL starting with http:// or https://");
+                return;
+            }
             
             const id = Math.random().toString(36).substring(2, 7);
             try {
-                await setDoc(doc(db, "links", id), { target: url, clicks: 0 });
-                document.getElementById('shortUrl').value = `${window.location.origin}/go/${id}`;
+                await setDoc(doc(db, "links", id), { 
+                    target: url, 
+                    clicks: 0,
+                    createdAt: new Date()
+                });
+                
+                // Vercel friendly URL construction
+                const finalLink = window.location.origin + "/go/" + id;
+                document.getElementById('shortUrl').value = finalLink;
                 document.getElementById('result').classList.remove('hidden');
-            } catch(e) { alert("Error! Check Firebase Config/Rules."); }
+            } catch(e) { 
+                console.error(e);
+                alert("Database Error: " + e.message); 
+            }
         };
 
-        window.copy = () => {
-            navigator.clipboard.writeText(document.getElementById('shortUrl').value);
-            alert("Link copied to clipboard!");
+        window.copyLink = () => {
+            const copyText = document.getElementById("shortUrl");
+            copyText.select();
+            navigator.clipboard.writeText(copyText.value);
+            alert("Copied!");
         };
     </script>
 </body>
