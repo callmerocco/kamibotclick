@@ -1,35 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LinkSwift | Shorten, Share, Earn</title>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkSwift | Shorten & Earn</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
-    </style>
-    <script src="https://pl28766194.effectivegatecpm.com/7f/96/3e/7f963e4328769ed4759a2a506a00870c.js"></script>
+    <style>.glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }</style>
 </head>
-<body class="bg-[#0f172a] text-slate-200 font-sans min-h-screen">
-    <nav class="p-6 flex justify-between items-center max-w-6xl mx-auto">
-        <div class="text-2xl font-black text-white tracking-tighter">LINK<span class="text-blue-500">SWIFT</span></div>
+<body class="bg-[#0f172a] text-slate-200 min-h-screen">
+    <nav class="p-6 max-w-6xl mx-auto flex justify-between">
+        <div class="text-2xl font-black text-white">LINK<span class="text-blue-500">SWIFT</span></div>
     </nav>
-
     <main class="max-w-4xl mx-auto pt-20 px-6 text-center">
-        <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-            Turn your links into <span class="text-blue-500">Revenue.</span>
-        </h1>
-        
-        <div class="glass p-2 rounded-2xl flex flex-col md:flex-row gap-2 max-w-2xl mx-auto shadow-2xl">
-            <input type="url" id="longUrl" placeholder="https://example.com" 
-                   class="bg-transparent p-4 flex-1 outline-none text-white placeholder:text-slate-500">
-            <button onclick="shortenLink()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-4 rounded-xl transition-all">
-                Shorten Now
-            </button>
+        <h1 class="text-5xl font-bold text-white mb-6">Shorten. Share. <span class="text-blue-500">Earn.</span></h1>
+        <div class="glass p-2 rounded-2xl flex flex-col md:flex-row gap-2 max-w-2xl mx-auto">
+            <input type="url" id="longUrl" placeholder="https://example.com" class="bg-transparent p-4 flex-1 outline-none text-white">
+            <button onclick="shortenLink()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-4 rounded-xl transition-all">Shorten Now</button>
         </div>
-
         <div id="result" class="mt-8 hidden">
-            <div class="glass p-4 rounded-xl inline-flex items-center gap-4 border-blue-500/30">
+            <div class="glass p-4 rounded-xl inline-flex items-center gap-4">
                 <input type="text" id="shortUrl" readonly class="bg-transparent text-blue-400 font-mono text-sm outline-none w-64">
                 <button onclick="copyLink()" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg text-xs font-bold uppercase">Copy</button>
             </div>
@@ -48,40 +36,20 @@
             messagingSenderId: "112587834193",
             appId: "1:112587834193:web:c3fb8e45f24b874edf8970"
         };
-
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // We attach functions to 'window' so the HTML buttons can see them
         window.shortenLink = async () => {
             const url = document.getElementById('longUrl').value;
-            if(!url || !url.startsWith('http')) {
-                alert("Please enter a valid URL starting with http:// or https://");
-                return;
-            }
-            
+            if(!url.startsWith('http')) return alert("Use a valid URL");
             const id = Math.random().toString(36).substring(2, 7);
-            try {
-                await setDoc(doc(db, "links", id), { 
-                    target: url, 
-                    clicks: 0,
-                    createdAt: new Date()
-                });
-                
-                // Vercel friendly URL construction
-                const finalLink = window.location.origin + "/go/" + id;
-                document.getElementById('shortUrl').value = finalLink;
-                document.getElementById('result').classList.remove('hidden');
-            } catch(e) { 
-                console.error(e);
-                alert("Database Error: " + e.message); 
-            }
+            await setDoc(doc(db, "links", id), { target: url, clicks: 0 });
+            document.getElementById('shortUrl').value = `${window.location.origin}/go/${id}`;
+            document.getElementById('result').classList.remove('hidden');
         };
 
         window.copyLink = () => {
-            const copyText = document.getElementById("shortUrl");
-            copyText.select();
-            navigator.clipboard.writeText(copyText.value);
+            navigator.clipboard.writeText(document.getElementById('shortUrl').value);
             alert("Copied!");
         };
     </script>
