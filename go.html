@@ -3,92 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Security Protocol - LinkSwift v2</title>
+    <title>SECURE GATEWAY | Protocol V2</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@400;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #020617; color: #f8fafc; overflow-x: hidden; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #010409; color: #e6edf3; overflow-x: hidden; }
         .mono { font-family: 'JetBrains Mono', monospace; }
-        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
-        .scan-anim { background: linear-gradient(to bottom, transparent, #3b82f6, transparent); height: 100px; width: 100%; position: absolute; top: -100px; animation: scanMove 3s infinite; opacity: 0.3; }
-        @keyframes scanMove { 0% { top: -100px; } 100% { top: 100%; } }
-        .ad-zone { background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .glass { background: rgba(13, 17, 23, 0.7); backdrop-filter: blur(25px); border: 1px solid rgba(48, 54, 61, 0.8); }
+        
+        /* The "Scanning" Laser Effect */
+        .scan-line {
+            height: 2px;
+            width: 100%;
+            background: linear-gradient(90deg, transparent, #238636, transparent);
+            position: absolute;
+            top: 0;
+            z-index: 20;
+            animation: scanning 2.5s ease-in-out infinite;
+            box-shadow: 0 0 15px #238636;
+        }
+        @keyframes scanning {
+            0% { top: 0%; opacity: 0; }
+            50% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        .cyber-grid {
+            background-image: radial-gradient(#161b22 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .ad-glow {
+            box-shadow: inset 0 0 20px rgba(35, 134, 54, 0.05);
+            border: 1px dashed #30363d;
+        }
+
+        .vertical-text { writing-mode: vertical-rl; text-orientation: mixed; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center">
+<body class="min-h-screen cyber-grid">
 
-    <div class="w-full bg-black/50 backdrop-blur-md border-b border-white/5 py-2 flex flex-col items-center sticky top-0 z-[100]">
-        <span class="text-[9px] text-slate-500 font-bold uppercase tracking-[0.3em] mb-1">Secure Sponsor Content</span>
-        <script type="text/javascript">
-            atOptions = { 'key' : '448e404a0e501735472e96bd763fedc3', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
-        </script>
-        <script src="https://www.highperformanceformat.com/448e404a0e501735472e96bd763fedc3/invoke.js"></script>
+    <div class="w-full bg-[#0d1117]/80 backdrop-blur-xl border-b border-[#30363d] py-4 flex flex-col items-center sticky top-0 z-[100]">
+        <div class="flex items-center gap-2 mb-2">
+            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+            <span class="text-[10px] text-slate-500 font-black uppercase tracking-[0.4em]">Encrypted Sponsor Node</span>
+        </div>
+        <div class="w-full max-w-[728px] h-[90px] bg-black/40 rounded-lg flex items-center justify-center ad-glow overflow-hidden">
+            <script type="text/javascript">
+                atOptions = { 'key' : '448e404a0e501735472e96bd763fedc3', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
+            </script>
+            <script src="https://www.highperformanceformat.com/448e404a0e501735472e96bd763fedc3/invoke.js"></script>
+        </div>
     </div>
 
-    <main class="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 mt-4">
+    <main class="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 p-6 lg:py-12">
         
         <div class="hidden lg:flex lg:col-span-3 flex-col gap-4">
-            <div class="ad-zone h-[300px] w-full">
-                <span class="text-slate-700 text-[10px] mono">SIDEBAR_AD_728x90_RESIZED</span>
+            <div class="glass rounded-3xl p-6 h-fit">
+                <h3 class="text-[10px] font-black uppercase text-blue-500 tracking-widest mb-4">Live Traffic Log</h3>
+                <div id="log-stream" class="space-y-3 opacity-60">
+                    <div class="text-[9px] mono text-slate-400 font-bold border-l-2 border-slate-700 pl-2">REQ: 192.168.1.1 -> SSL_VERIFY</div>
+                    <div class="text-[9px] mono text-green-500 font-bold border-l-2 border-green-700 pl-2">STATUS: OK_200</div>
+                    <div class="text-[9px] mono text-slate-400 font-bold border-l-2 border-slate-700 pl-2">HANDSHAKE: COMPLETE</div>
+                </div>
             </div>
-            <div class="ad-zone h-[300px] w-full text-slate-700 text-[10px] mono uppercase tracking-widest">
-                Scroll-Linked Ad Zone
+            <div class="ad-glow rounded-3xl h-[400px] flex items-center justify-center p-4">
+                <span class="vertical-text text-[10px] mono text-slate-700 font-black tracking-[1em]">MONETIZATION_SIDEBAR_A</span>
             </div>
         </div>
 
-        <div class="lg:col-span-6 space-y-6">
-            <div class="glass rounded-[2.5rem] p-8 relative overflow-hidden shadow-2xl shadow-blue-900/20">
-                <div class="scan-anim"></div>
+        <div class="lg:col-span-6 space-y-8">
+            <div class="glass rounded-[3rem] p-8 md:p-12 relative overflow-hidden shadow-2xl">
+                <div class="scan-line"></div>
                 
-                <div class="flex items-center gap-4 mb-8">
-                    <div class="h-14 w-14 bg-blue-600/20 rounded-2xl flex items-center justify-center border border-blue-500/30">
-                        <svg class="w-7 h-7 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                <div class="flex flex-col items-center text-center mb-10">
+                    <div class="h-20 w-20 bg-green-500/10 rounded-3xl flex items-center justify-center border border-green-500/20 mb-6 relative">
+                        <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        <span class="absolute -top-2 -right-2 bg-blue-600 text-white text-[8px] font-black px-2 py-1 rounded-full uppercase">Pro</span>
                     </div>
-                    <div>
-                        <h1 class="text-xl font-black text-white leading-none">SafeLink™ Analyzer</h1>
-                        <p class="text-xs text-slate-500 mt-1 mono uppercase tracking-tighter">Status: Scanning Target...</p>
+                    <h1 class="text-3xl font-black text-white tracking-tighter uppercase italic">Protocol <span class="text-green-500">Analyzer</span></h1>
+                    <p class="text-xs text-slate-500 mt-2 font-bold uppercase tracking-widest mono" id="header-status">Initializing Core Integrity Check...</p>
+                </div>
+
+                <div class="bg-black/60 rounded-3xl p-6 border border-white/5 mb-10">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-[10px] mono text-green-500 font-bold uppercase tracking-widest">Target Security Matrix</span>
+                        <div class="flex gap-1">
+                            <div class="w-1.5 h-1.5 rounded-full bg-red-500/30"></div>
+                            <div class="w-1.5 h-1.5 rounded-full bg-yellow-500/30"></div>
+                            <div class="w-1.5 h-1.5 rounded-full bg-green-500/30"></div>
+                        </div>
+                    </div>
+                    <div id="target-info" class="space-y-3">
+                        <div class="flex justify-between border-b border-white/5 pb-2">
+                            <span class="text-[10px] mono text-slate-500">ENDPOINT_ID</span>
+                            <span class="text-[10px] mono text-white font-bold" id="ui-slug">FETCHING...</span>
+                        </div>
+                        <div class="flex justify-between border-b border-white/5 pb-2">
+                            <span class="text-[10px] mono text-slate-500">ENCRYPTION</span>
+                            <span class="text-[10px] mono text-green-500 font-bold">AES_256_GCM</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-[10px] mono text-slate-500">TRUST_SCORE</span>
+                            <span class="text-[10px] mono text-blue-500 font-bold">A+ (SECURE)</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="bg-black/40 rounded-2xl p-5 border border-white/5 mb-8">
-                    <p class="text-[10px] mono text-blue-400 mb-2 uppercase font-bold">Target Meta-Data</p>
-                    <div id="target-info" class="space-y-2">
-                        <div class="h-4 w-3/4 bg-slate-800 rounded animate-pulse"></div>
-                        <div class="h-4 w-1/2 bg-slate-800 rounded animate-pulse"></div>
-                    </div>
-                </div>
-
-                <div class="flex flex-col items-center justify-center py-4">
-                    <div class="relative h-24 w-24 mb-6">
-                        <svg class="h-24 w-24 transform -rotate-90">
-                            <circle cx="48" cy="48" r="44" stroke="#0f172a" stroke-width="8" fill="transparent"/>
-                            <circle id="progress" cx="48" cy="48" r="44" stroke="#2563eb" stroke-width="8" fill="transparent" stroke-dasharray="276" stroke-dashoffset="276" class="transition-all duration-1000 ease-linear"/>
+                <div class="flex flex-col items-center">
+                    <div class="relative h-32 w-32 mb-8 group">
+                        <div class="absolute inset-0 bg-green-500/20 blur-2xl rounded-full group-hover:bg-green-500/40 transition-all"></div>
+                        <svg class="h-32 w-32 transform -rotate-90 relative z-10">
+                            <circle cx="64" cy="64" r="60" stroke="#161b22" stroke-width="10" fill="transparent"/>
+                            <circle id="progress" cx="64" cy="64" r="60" stroke="#238636" stroke-width="10" fill="transparent" stroke-dasharray="377" stroke-dashoffset="377" class="transition-all duration-1000 ease-linear"/>
                         </svg>
-                        <span id="timerText" class="absolute inset-0 flex items-center justify-center text-3xl font-black text-white">10</span>
+                        <span id="timerText" class="absolute inset-0 flex items-center justify-center text-4xl font-black text-white z-20 mono">--</span>
                     </div>
-                    <p id="status-msg" class="text-sm mono text-slate-400">Verifying SSL Certificates...</p>
+                    <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden mb-4">
+                        <div id="bar-progress" class="h-full bg-gradient-to-r from-blue-600 to-green-500 w-0 transition-all duration-1000"></div>
+                    </div>
+                    <p id="status-msg" class="text-[10px] mono text-slate-500 uppercase font-bold tracking-widest text-center animate-pulse">Requesting Clearance...</p>
                 </div>
 
-                <button id="finalBtn" disabled class="w-full mt-8 bg-slate-800 text-slate-500 py-6 rounded-3xl font-black uppercase tracking-widest transition-all cursor-not-allowed border border-white/5">
-                    Analyzing...
+                <button id="finalBtn" disabled class="w-full mt-12 bg-[#21262d] text-slate-500 py-6 rounded-[2rem] font-black uppercase tracking-[0.3em] text-xs transition-all cursor-not-allowed border border-white/5 shadow-inner">
+                    Establishing Tunnel...
                 </button>
             </div>
 
-            <div class="ad-zone h-[250px] w-full flex-col gap-2">
-                <span class="text-slate-700 text-[10px] mono">AD_ZONE_300x250</span>
-                </div>
+            <div class="ad-glow rounded-[2.5rem] h-[280px] w-full flex flex-col items-center justify-center gap-4 bg-white/5">
+                <span class="text-slate-700 text-[10px] mono font-bold">RESERVED_AD_SPACE_B</span>
+                <div class="w-[300px] h-[200px] bg-black/40 rounded-xl"></div>
+            </div>
         </div>
 
         <div class="hidden lg:flex lg:col-span-3 flex-col gap-4">
-            <div class="ad-zone h-[610px] w-full text-slate-700 text-[10px] mono uppercase vertical-text">
-                Skyscraper Monetization Zone
+            <div class="ad-glow rounded-3xl h-full min-h-[600px] flex items-center justify-center bg-white/[0.02]">
+                <span class="vertical-text text-[10px] mono text-slate-700 font-black tracking-[1em]">SKYSCRAPER_PREMIUM</span>
             </div>
         </div>
 
     </main>
 
-    <div class="fixed bottom-0 w-full bg-blue-600 p-3 text-center text-white font-bold text-sm z-[100] cursor-pointer hover:bg-blue-500 transition-all">
-        AD: Secure Your Connection with LinkSwift Premium — Click Here
+    <div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl glass p-4 rounded-3xl border border-blue-500/30 flex items-center justify-between z-[100] shadow-2xl">
+        <div class="flex items-center gap-4">
+            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/40">
+                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </div>
+            <div>
+                <p class="text-[10px] font-black text-white uppercase tracking-widest">Ad-Free Protocol?</p>
+                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-tighter">Upgrade to KamiBot Elite</p>
+            </div>
+        </div>
+        <button class="bg-blue-600 text-white text-[10px] font-black px-6 py-3 rounded-2xl uppercase hover:bg-blue-500 transition-all active:scale-95">Unlock Now</button>
     </div>
 
     <script type="module">
@@ -107,67 +173,70 @@
         const db = getFirestore(app);
 
         const id = window.location.pathname.split('/').filter(s => s && s !== 'go').pop();
+        document.getElementById('ui-slug').innerText = id ? `PROT_ID/${id.toUpperCase()}` : "GUEST_ACCESS";
 
-        async function analyzeLink() {
+        const statusSteps = [
+            "Syncing Node...",
+            "Decrypting Metadata...",
+            "Bypassing Sandbox...",
+            "Handshake Established",
+            "Routing Payload...",
+            "Gate Unlocked"
+        ];
+
+        async function initAnalyzer() {
             let target = "https://www.google.com";
             if(id) {
                 try {
                     const snap = await getDoc(doc(db, "links", id));
                     if(snap.exists()) target = snap.data().target;
-                } catch(e) {}
+                } catch(e) { console.error("Database unavailable"); }
             }
-
-            // SIMULATE REAL CHECK
-            const targetInfo = document.getElementById('target-info');
-            const urlObj = new URL(target);
             
+            // Build anticipation
             setTimeout(() => {
-                targetInfo.innerHTML = `
-                    <div class="text-xs mono"><span class="text-slate-500">DOMAIN:</span> <span class="text-white">${urlObj.hostname}</span></div>
-                    <div class="text-xs mono"><span class="text-slate-500">PROTOCOL:</span> <span class="text-green-500">HTTPS/SECURE</span></div>
-                    <div class="text-xs mono"><span class="text-slate-500">THREAT:</span> <span class="text-blue-500">0% DETECTED</span></div>
-                `;
+                document.getElementById('header-status').innerText = "Security Checks Passed. Decoding Destination...";
                 startTimer(target);
-            }, 1000);
+            }, 1500);
         }
 
-        function startTimer(targetUrl) {
+        function startTimer(finalUrl) {
             let count = 10;
             const btn = document.getElementById('finalBtn');
             const prog = document.getElementById('progress');
+            const bar = document.getElementById('bar-progress');
             const txt = document.getElementById('timerText');
             const msg = document.getElementById('status-msg');
 
-            const statusSteps = [
-                "Bypassing Proxy...",
-                "Scanning Redirects...",
-                "Heuristic Analysis...",
-                "Database Lookup...",
-                "Finalizing Handshake..."
-            ];
-
             const itv = setInterval(() => {
                 count--;
-                txt.innerText = count;
-                prog.style.strokeDashoffset = 276 - (276 * (10 - count) / 10);
+                txt.innerText = count < 10 ? `0${count}` : count;
                 
-                if(count % 2 === 0) msg.innerText = statusSteps[Math.floor(Math.random()*statusSteps.length)];
+                // Animate Radial and Bar
+                const percent = ((10 - count) / 10) * 100;
+                prog.style.strokeDashoffset = 377 - (377 * (10 - count) / 10);
+                bar.style.width = `${percent}%`;
+                
+                // Update terminal text
+                if(count % 2 === 0) {
+                    msg.innerText = statusSteps[Math.floor(Math.random() * statusSteps.length)];
+                }
 
                 if(count <= 0) {
                     clearInterval(itv);
-                    msg.innerText = "Target Verified: SAFE";
-                    msg.className = "text-sm mono text-green-500 font-bold";
+                    msg.innerText = "ACCESS GRANTED";
+                    msg.className = "text-[10px] mono text-green-500 font-black tracking-[0.4em]";
                     
                     btn.disabled = false;
-                    btn.innerText = "Continue to Destination";
-                    btn.className = "w-full mt-8 bg-blue-600 text-white py-6 rounded-3xl font-black uppercase tracking-widest hover:bg-blue-500 shadow-xl shadow-blue-500/30 active:scale-95 transition-all";
+                    btn.innerText = "ACCESS DESTINATION";
+                    btn.className = "w-full mt-12 bg-green-600 text-white py-6 rounded-[2rem] font-black uppercase tracking-[0.3em] text-xs hover:bg-green-500 shadow-2xl shadow-green-500/20 active:scale-95 transition-all cursor-pointer";
                     
-                    btn.onclick = () => window.location.href = targetUrl;
+                    btn.onclick = () => window.location.href = finalUrl;
                 }
             }, 1000);
         }
 
-        analyzeLink();
+        initAnalyzer();
     </script>
 </body>
 </html>
