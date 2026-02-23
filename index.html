@@ -3,78 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Maintenance | KAMI.OS</title>
+    <title>Maintenance | KAMI.OS</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { 
-            background-color: #050505; 
+            background-color: #030303; 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             color: #fff;
         }
-        .shimmer {
-            background: linear-gradient(90deg, #050505 0%, #111 50%, #050505 100%);
-            background-size: 200% 100%;
-            animation: shimmer 3s infinite linear;
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .glow-input:focus {
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.5);
         }
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
+        @keyframes pulse-red {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
         }
-        .pulse-dot {
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
-        }
+        .status-pulse { animation: pulse-red 2s infinite; }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen overflow-hidden px-6">
+<body class="flex flex-col items-center justify-center min-h-screen px-6 overflow-hidden">
 
-    <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-blue-900/10 blur-[120px] rounded-full"></div>
-        <div class="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-blue-900/10 blur-[120px] rounded-full"></div>
-    </div>
+    <div class="absolute inset-0 z-0 opacity-20" style="background-image: radial-gradient(#1e293b 1px, transparent 1px); background-size: 40px 40px;"></div>
 
-    <main class="relative z-10 text-center max-w-lg">
+    <main class="relative z-10 w-full max-w-2xl">
         
-        <div class="inline-flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-2 rounded-full mb-12">
-            <div class="w-2 h-2 bg-blue-500 rounded-full pulse-dot"></div>
-            <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-400">System Optimization in Progress</span>
-        </div>
-
-        <h1 class="text-5xl md:text-6xl font-extrabold tracking-tighter mb-6 leading-tight">
-            Something awesome is <br>
-            <span class="text-white/40">coming soon.</span>
-        </h1>
-        
-        <p class="text-gray-500 text-lg mb-12 leading-relaxed">
-            We are upgrading the KamiBot infrastructure to v3.0. This includes faster edge redirects and enhanced security protocols.
-        </p>
-
-        <div class="w-full h-[1px] bg-white/10 rounded-full mb-12 relative overflow-hidden">
-            <div class="absolute inset-0 shimmer w-full h-full"></div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-8 text-left border-t border-white/5 pt-12">
-            <div>
-                <p class="text-[10px] font-black uppercase tracking-widest text-gray-600 mb-2">Estimated Time</p>
-                <p class="text-sm font-bold text-gray-300">~ 2.5 Hours</p>
+        <div class="flex justify-between items-center mb-16 border-b border-white/5 pb-6">
+            <div class="flex items-center gap-3">
+                <div class="w-2 h-2 bg-red-500 rounded-full status-pulse"></div>
+                <span class="mono text-[10px] uppercase tracking-widest text-red-500 font-bold">Public Nodes: Offline</span>
             </div>
-            <div>
-                <p class="text-[10px] font-black uppercase tracking-widest text-gray-600 mb-2">Service Status</p>
-                <p class="text-sm font-bold oklch(70.5% 0.213 47.604)">API Nodes Restarting</p>
+            <div class="flex items-center gap-3 text-right">
+                <span class="mono text-[10px] uppercase tracking-widest text-emerald-500 font-bold">Enterprise & Admin: Online</span>
+                <div class="w-2 h-2 bg-emerald-500 rounded-full shadow-[0_0_10px_#10b981]"></div>
+            </div>
+        </div>
+
+        <div class="space-y-6 mb-12">
+            <h1 class="text-6xl font-extrabold tracking-tighter leading-none">
+                Something awesome <br> is <span class="text-white/20 italic">in the works.</span>
+            </h1>
+            <p class="text-gray-500 text-lg max-w-md leading-relaxed">
+                Standard link routing is currently suspended for infrastructure upgrades. High-priority Enterprise nodes remain operational.
+            </p>
+        </div>
+
+        <form class="flex flex-col sm:flex-row gap-3 mb-16">
+            <input type="email" placeholder="Enter email for deployment alert" 
+                class="glow-input flex-1 bg-white/5 border border-white/10 px-6 py-4 rounded-2xl outline-none transition-all text-sm font-medium placeholder:text-gray-700">
+            <button type="submit" 
+                class="bg-white text-black px-8 py-4 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all active:scale-95">
+                Notify Me
+            </button>
+        </form>
+
+        <div class="bg-white/[0.02] border border-white/5 rounded-3xl p-8 mono text-[10px] text-gray-600 space-y-2">
+            <div class="flex justify-between">
+                <span>> INITIALIZING_V3_CORE</span>
+                <span class="text-emerald-900">SUCCESS</span>
+            </div>
+            <div class="flex justify-between">
+                <span>> MIGRATING_USER_DATA</span>
+                <span class="text-blue-900">88%</span>
+            </div>
+            <div class="flex justify-between">
+                <span>> RE-ROUTING_PUBLIC_TRAFFIC</span>
+                <span class="text-red-900">PENDING_REBOOT</span>
             </div>
         </div>
 
     </main>
 
-    <footer class="fixed bottom-12 w-full text-center">
-        <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-700">
-            Follow @KamiBot for live updates
-        </p>
+    <footer class="fixed bottom-12 opacity-30 flex items-center gap-4">
+        <span class="text-[10px] font-bold uppercase tracking-[0.5em]">KamiOS Link Protocol</span>
     </footer>
 
 </body>
