@@ -81,34 +81,9 @@
         <section class="max-w-7xl mx-auto px-6 pt-32 pb-20 text-center relative">
             <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blue-600/20 blur-[120px] -z-10 animate-pulse-slow"></div>
             <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-white mb-6">Shorten. <span class="gradient-text">Monetize.</span> Scale.</h1>
-            <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 font-medium">The most advanced link protocol for creators. Turn every click into revenue with built-in analytics and enterprise-grade security.</p>
-            <div class="flex flex-col md:flex-row gap-4 justify-center">
-                <button onclick="toggleAuthModal()" class="bg-blue-600 hover:bg-blue-500 px-10 py-5 rounded-2xl font-black uppercase tracking-widest transition-all shadow-xl shadow-blue-600/20">Get Started Free</button>
-                <a href="#features" class="bg-white/5 hover:bg-white/10 px-10 py-5 rounded-2xl font-black uppercase tracking-widest border border-white/10 transition-all">How it works</a>
-            </div>
+            <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 font-medium">The most advanced link protocol for creators.</p>
+            <button onclick="toggleAuthModal()" class="bg-blue-600 hover:bg-blue-500 px-10 py-5 rounded-2xl font-black uppercase tracking-widest transition-all">Get Started Free</button>
         </section>
-
-        <section id="features" class="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-3 gap-8">
-            <div class="glass p-8 rounded-[2.5rem]">
-                <div class="text-blue-500 text-3xl mb-4">⚡</div>
-                <h3 class="text-white font-black uppercase tracking-widest text-sm mb-2">Instant Redirection</h3>
-                <p class="text-slate-500 text-sm leading-relaxed">Our global edge network ensures your users reach their destination in milliseconds.</p>
-            </div>
-            <div class="glass p-8 rounded-[2.5rem]">
-                <div class="text-emerald-400 text-3xl mb-4">💎</div>
-                <h3 class="text-white font-black uppercase tracking-widest text-sm mb-2">High CPM Monetization</h3>
-                <p class="text-slate-500 text-sm leading-relaxed">Integrated with top-tier ad networks to maximize your earnings per click.</p>
-            </div>
-            <div class="glass p-8 rounded-[2.5rem]">
-                <div class="text-purple-400 text-3xl mb-4">📊</div>
-                <h3 class="text-white font-black uppercase tracking-widest text-sm mb-2">Live Analytics</h3>
-                <p class="text-slate-500 text-sm leading-relaxed">Track your traffic, geography, and revenue sources in real-time from your dashboard.</p>
-            </div>
-        </section>
-
-        <footer class="py-10 text-center text-slate-600 text-[10px] font-black uppercase tracking-[0.2em]">
-            &copy; 2026 KamiBot Protocol &bull; <a href="/privacy" class="hover:text-white">Privacy</a> &bull; <a href="/tos" class="hover:text-white">Terms</a>
-        </footer>
     </div>
 
     <div id="dashboard" class="hidden">
@@ -122,9 +97,22 @@
 
         <main class="max-w-4xl mx-auto px-6 py-12">
             <div class="glass p-2 rounded-[2rem] mb-12 shadow-2xl">
-                <div class="flex flex-col md:flex-row gap-2">
-                    <input type="url" id="longUrl" placeholder="Enter destination URL..." class="bg-transparent p-5 flex-1 outline-none text-white font-medium">
-                    <button onclick="createLink()" class="bg-blue-600 hover:bg-blue-500 px-12 py-5 rounded-[1.5rem] font-black uppercase tracking-widest transition-all">Create Link</button>
+                <div class="flex flex-col p-4 gap-4">
+                    <div class="flex flex-col md:flex-row gap-2">
+                        <input type="url" id="longUrl" placeholder="Enter destination URL..." class="bg-transparent p-4 flex-1 outline-none text-white font-medium">
+                        <button onclick="createLink()" class="bg-blue-600 hover:bg-blue-500 px-10 py-4 rounded-xl font-black uppercase tracking-widest transition-all">Create Link</button>
+                    </div>
+                    
+                    <div id="adminPanel" class="hidden flex items-center gap-3 bg-white/5 p-4 rounded-2xl border border-white/5">
+                        <div class="bg-blue-500/20 text-blue-400 p-2 rounded-lg">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        </div>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Custom Alias:</span>
+                        <div class="flex items-center flex-1 bg-black/30 rounded-xl px-4 border border-white/10 focus-within:border-blue-500 transition-all">
+                            <span class="text-slate-600 font-bold text-sm">kamibot.click/</span>
+                            <input type="text" id="customSlug" placeholder="taylorswift" class="bg-transparent py-3 flex-1 outline-none text-blue-400 font-bold text-sm">
+                        </div>
+                    </div>
                 </div>
             </div>
             <div id="linksContainer" class="grid gap-4"></div>
@@ -134,7 +122,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, GithubAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, setDoc, query, where, onSnapshot, doc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, setDoc, getDoc, query, where, onSnapshot, doc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = { 
             apiKey: "AIzaSyAuTU6BV_uxz56NYiJioV2NJ7Wk_wMhL0g",
@@ -149,9 +137,10 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         
+        // MASTER ADMIN UID
+        const MASTER_UID = "5kQjEGUB6mXxUhcO1LqZE2VZFon1";
         let captchaVerified = false;
 
-        // UI MODES
         window.toggleAuthModal = () => {
             const modal = document.getElementById('authOverlay');
             modal.classList.toggle('opacity-0');
@@ -167,47 +156,55 @@
         window.showToast = (msg, type = 'info') => {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            toast.className = `bg-white text-slate-900 px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4 border border-slate-200 transition-all duration-500 opacity-0 -translate-y-8 pointer-events-auto`;
+            toast.className = `glass bg-white text-slate-900 px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4 border border-slate-200 transition-all duration-500 pointer-events-auto`;
             toast.innerHTML = `<div class="font-black ${type==='error'?'text-red-500':'text-blue-500'}">${type==='error'?'✕':'✓'}</div><div class="text-[10px] font-black uppercase tracking-widest">${msg}</div>`;
             container.appendChild(toast);
-            setTimeout(() => toast.classList.remove('opacity-0', '-translate-y-8'), 10);
-            setTimeout(() => { toast.classList.add('opacity-0', '-translate-y-8'); setTimeout(()=>toast.remove(), 500); }, 3000);
+            setTimeout(() => toast.remove(), 3000);
         };
 
         onAuthStateChanged(auth, (user) => {
-            const landing = document.getElementById('landingPage');
-            const dashboard = document.getElementById('dashboard');
-            const modal = document.getElementById('authOverlay');
-
             if (user) {
-                landing.classList.add('hidden');
-                dashboard.classList.remove('hidden');
-                modal.classList.add('opacity-0', 'pointer-events-none');
+                document.getElementById('landingPage').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                document.getElementById('authOverlay').classList.add('opacity-0', 'pointer-events-none');
                 document.getElementById('userDisplay').innerText = user.email || user.displayName;
+                
+                // Toggle Admin Panel
+                document.getElementById('adminPanel').classList.toggle('hidden', user.uid !== MASTER_UID);
+                
                 loadLinks(user.uid);
             } else {
-                landing.classList.remove('hidden');
-                dashboard.classList.add('hidden');
+                document.getElementById('landingPage').classList.remove('hidden');
+                document.getElementById('dashboard').classList.add('hidden');
             }
         });
 
-        // AUTH & DATABASE (Keep same logic as before)
-        window.loginGoogle = () => signInWithPopup(auth, new GoogleAuthProvider()).catch(e => showToast(e.message, 'error'));
-        window.loginGithub = () => signInWithPopup(auth, new GithubAuthProvider()).catch(e => showToast(e.message, 'error'));
-        window.loginEmail = () => signInWithEmailAndPassword(auth, authEmail.value, authPass.value).catch(e => showToast(e.message, 'error'));
-        window.registerEmail = () => createUserWithEmailAndPassword(auth, authEmail.value, authPass.value).catch(e => showToast(e.message, 'error'));
-        window.logout = () => signOut(auth);
-
         window.createLink = async () => {
             const urlInput = document.getElementById('longUrl');
+            const customInput = document.getElementById('customSlug');
+            const user = auth.currentUser;
+
             if(!urlInput.value) return showToast("Enter a URL", "error");
-            const slug = Math.random().toString(36).substring(2, 7);
+
+            let slug = Math.random().toString(36).substring(2, 7);
+            
+            // Apply Master Admin Logic
+            if (user.uid === MASTER_UID && customInput.value.trim() !== "") {
+                slug = customInput.value.trim().toLowerCase().replace(/[^a-z0-9-_]/g, '');
+            }
+
             try {
-                await setDoc(doc(db, "links", slug), {
-                    target: urlInput.value, slug: slug, userId: auth.currentUser.uid, clicks: 0, createdAt: serverTimestamp()
+                const docRef = doc(db, "links", slug);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) return showToast("Alias already exists", "error");
+
+                await setDoc(docRef, {
+                    target: urlInput.value, slug: slug, userId: user.uid, clicks: 0, createdAt: serverTimestamp()
                 });
+                
                 urlInput.value = '';
-                showToast("Protocol Live", "success");
+                customInput.value = '';
+                showToast(`Success: /${slug}`, "success");
             } catch (e) { showToast("Error", "error"); }
         };
 
@@ -216,14 +213,13 @@
             onSnapshot(q, (snap) => {
                 const container = document.getElementById('linksContainer');
                 container.innerHTML = '';
-                if(snap.empty) { container.innerHTML = `<div class="p-16 border-2 border-dashed border-slate-800 rounded-[2rem] text-center text-slate-600 font-bold uppercase tracking-widest text-[10px]">No links generated yet.</div>`; return; }
                 snap.forEach((d) => {
                     const data = d.data();
                     const shortUrl = `${window.location.origin}/go/${data.slug}`;
                     container.innerHTML += `
-                        <div class="glass p-6 rounded-[2rem] flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div class="glass p-6 rounded-[2rem] flex flex-col md:flex-row items-center justify-between gap-6 animate-in fade-in slide-in-from-bottom-4">
                             <div class="overflow-hidden w-full text-left">
-                                <p class="text-blue-400 font-black text-[10px] uppercase tracking-widest mb-1">${data.slug}</p>
+                                <p class="text-blue-400 font-black text-[10px] uppercase tracking-widest mb-1">/${data.slug}</p>
                                 <p class="text-white font-bold truncate mb-1 text-sm">${shortUrl}</p>
                                 <p class="text-slate-600 text-[10px] truncate uppercase font-bold tracking-tighter">${data.target}</p>
                             </div>
@@ -235,10 +231,15 @@
                 });
             });
         }
+
+        window.loginGoogle = () => signInWithPopup(auth, new GoogleAuthProvider()).catch(e => showToast(e.message, 'error'));
+        window.loginGithub = () => signInWithPopup(auth, new GithubAuthProvider()).catch(e => showToast(e.message, 'error'));
+        window.loginEmail = () => signInWithEmailAndPassword(auth, authEmail.value, authPass.value).catch(e => showToast(e.message, 'error'));
+        window.registerEmail = () => createUserWithEmailAndPassword(auth, authEmail.value, authPass.value).catch(e => showToast(e.message, 'error'));
+        window.logout = () => signOut(auth);
         window.copyL = (u) => { navigator.clipboard.writeText(u); showToast("Copied", "success"); };
         window.delL = async (id) => { if(confirm("Delete link?")) { await deleteDoc(doc(db, "links", id)); showToast("Deleted", "error"); } };
     </script>
     <script src="//code.tidio.co/sun54z8bwa6q5lliehue9xsynflzvm7k.js" async></script>
-    
 </body>
 </html>
