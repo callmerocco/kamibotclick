@@ -3,311 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KAMI-OS | Global Link Infrastructure</title>
+    <title>System Maintenance | KAMI.OS</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .glass { @apply bg-[#030712]/60 backdrop-blur-2xl border border-white/5; }
-            .neon-border { @apply border-blue-500/30 shadow-[0_0_15px_rgba(59,130,246,0.1)]; }
-            .hero-text { @apply text-8xl font-black tracking-tighter leading-[0.85] uppercase italic; }
-            .btn-apex { @apply bg-white text-black font-black uppercase tracking-widest text-[10px] px-8 py-4 rounded-full hover:bg-blue-500 hover:text-white transition-all active:scale-95; }
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            background-color: #050505; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            color: #fff;
         }
-        body { background: #000; color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; }
-        .grid-bg { background-image: linear-gradient(to right, #ffffff05 1px, transparent 1px), linear-gradient(to bottom, #ffffff05 1px, transparent 1px); background-size: 40px 40px; }
-        .mono { font-family: 'JetBrains Mono', monospace; }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+        .shimmer {
+            background: linear-gradient(90deg, #050505 0%, #111 50%, #050505 100%);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite linear;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .pulse-dot {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
     </style>
 </head>
-<body class="grid-bg">
+<body class="flex flex-col items-center justify-center min-h-screen overflow-hidden px-6">
 
-    <div id="landingPage">
-        <nav class="p-8 flex justify-between items-center sticky top-0 z-[100] backdrop-blur-md">
-            <div class="flex items-center gap-4">
-                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center font-black italic">K</div>
-                <span class="font-black italic tracking-tighter text-2xl uppercase">KAMI<span class="text-blue-600">OS</span></span>
-            </div>
-            <div class="hidden lg:flex items-center gap-12 text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">
-                <a href="#infra" class="hover:text-white transition-all">Infrastructure</a>
-                <a href="#security" class="hover:text-white transition-all">Security</a>
-                <a href="#pricing" class="hover:text-white transition-all">Network</a>
-                <a href="#api" class="hover:text-white transition-all">API Docs</a>
-            </div>
-            <button onclick="toggleAuthModal(true)" class="btn-apex">Console Login</button>
-        </nav>
-
-        <header class="max-w-7xl mx-auto px-8 pt-32 pb-60 relative">
-            <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-600/10 blur-[120px] rounded-full -z-10"></div>
-            <p class="text-blue-500 font-black uppercase tracking-[0.5em] mb-8 animate-pulse">Global Traffic Authority</p>
-            <h1 class="hero-text mb-12">Total <br><span class="text-blue-600">Control.</span></h1>
-            <div class="flex flex-col md:flex-row gap-8 items-start">
-                <p class="text-slate-400 max-w-lg text-lg font-medium leading-relaxed">
-                    The world’s most advanced link redirection protocol. Built for high-frequency trading, enterprise-grade affiliate marketing, and secure data tunneling.
-                </p>
-                <div class="flex gap-4">
-                    <button onclick="toggleAuthModal(true)" class="bg-blue-600 px-12 py-6 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-blue-500 transition-all">Initialize Node</button>
-                </div>
-            </div>
-        </header>
-
-        <section id="infra" class="max-w-7xl mx-auto px-8 py-40 border-t border-white/5">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div class="glass p-10 rounded-[3rem] space-y-4">
-                    <span class="text-3xl">🌍</span>
-                    <h3 class="font-black uppercase tracking-widest text-xs">Geo-Fencing</h3>
-                    <p class="text-slate-500 text-xs leading-relaxed font-bold">Route users based on ISO country codes with 99.9% accuracy.</p>
-                </div>
-                <div class="glass p-10 rounded-[3rem] space-y-4">
-                    <span class="text-3xl">📱</span>
-                    <h3 class="font-black uppercase tracking-widest text-xs">Device Logic</h3>
-                    <p class="text-slate-500 text-xs leading-relaxed font-bold">Separate iOS, Android, and Desktop traffic into unique tunnels.</p>
-                </div>
-                <div class="glass p-10 rounded-[3rem] space-y-4">
-                    <span class="text-3xl">🛡️</span>
-                    <h3 class="font-black uppercase tracking-widest text-xs">Cloaking V2</h3>
-                    <p class="text-slate-500 text-xs leading-relaxed font-bold">Bypass ad-platform bots and crawlers using advanced heuristics.</p>
-                </div>
-                <div class="glass p-10 rounded-[3rem] space-y-4">
-                    <span class="text-3xl">🔗</span>
-                    <h3 class="font-black uppercase tracking-widest text-xs">API Access</h3>
-                    <p class="text-slate-500 text-xs leading-relaxed font-bold">Programmatic link creation for high-volume automated systems.</p>
-                </div>
-            </div>
-        </section>
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-blue-900/10 blur-[120px] rounded-full"></div>
+        <div class="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-blue-900/10 blur-[120px] rounded-full"></div>
     </div>
 
-    <div id="authOverlay" class="fixed inset-0 z-[200] bg-black/90 backdrop-blur-3xl flex items-center justify-center p-8 opacity-0 pointer-events-none transition-opacity">
-        <div class="glass p-12 rounded-[4rem] w-full max-w-xl text-center relative neon-border">
-            <button onclick="toggleAuthModal(false)" class="absolute top-10 right-10 text-slate-500 hover:text-white transition-all">CLOSE_TERMINAL</button>
-            <h2 class="text-4xl font-black uppercase italic mb-12">Identity <span class="text-blue-500">Check</span></h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                <button onclick="loginGoogle()" id="googleBtn" disabled class="bg-white text-black font-black py-5 rounded-3xl flex items-center justify-center gap-3 text-[10px] uppercase disabled:opacity-20"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-4"> Google Node</button>
-                <button onclick="loginGithub()" id="githubBtn" disabled class="bg-slate-900 text-white font-black py-5 rounded-3xl flex items-center justify-center gap-3 text-[10px] uppercase disabled:opacity-20"><img src="https://authjs.dev/img/providers/github.svg" class="w-4 invert"> GitHub Node</button>
-            </div>
+    <main class="relative z-10 text-center max-w-lg">
+        
+        <div class="inline-flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-2 rounded-full mb-12">
+            <div class="w-2 h-2 bg-blue-500 rounded-full pulse-dot"></div>
+            <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-400">System Optimization in Progress</span>
+        </div>
 
-            <div class="flex justify-center mb-10">
-                <div class="g-recaptcha" data-sitekey="6LeQe3QsAAAAAK36IFKpSotRATLT4u2iNRs3t2Ah" data-callback="onCaptchaVerified" data-theme="dark"></div>
-            </div>
+        <h1 class="text-5xl md:text-6xl font-extrabold tracking-tighter mb-6 leading-tight">
+            Something awesome is <br>
+            <span class="text-white/40">coming soon.</span>
+        </h1>
+        
+        <p class="text-gray-500 text-lg mb-12 leading-relaxed">
+            We are upgrading the KamiBot infrastructure to v3.0. This includes faster edge redirects and enhanced security protocols.
+        </p>
 
-            <div class="flex items-center gap-4 bg-white/5 p-6 rounded-3xl border border-white/5">
-                <input type="checkbox" id="legalAgree" onchange="checkRequirements()" class="w-6 h-6 rounded bg-slate-900 border-none checked:bg-blue-600 cursor-pointer">
-                <label for="legalAgree" class="text-[10px] text-slate-500 font-bold uppercase text-left leading-tight">Confirm compliance with global traffic laws and link protocol terms.</label>
+        <div class="w-full h-[1px] bg-white/10 rounded-full mb-12 relative overflow-hidden">
+            <div class="absolute inset-0 shimmer w-full h-full"></div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-8 text-left border-t border-white/5 pt-12">
+            <div>
+                <p class="text-[10px] font-black uppercase tracking-widest text-gray-600 mb-2">Estimated Time</p>
+                <p class="text-sm font-bold text-gray-300">~ 2.5 Hours</p>
+            </div>
+            <div>
+                <p class="text-[10px] font-black uppercase tracking-widest text-gray-600 mb-2">Service Status</p>
+                <p class="text-sm font-bold text-emerald-500">API Nodes Online</p>
             </div>
         </div>
-    </div>
 
-    <div id="dashboard" class="hidden min-h-screen">
-        <header class="p-8 border-b border-white/5 flex flex-wrap justify-between items-center bg-black/50 backdrop-blur-xl sticky top-0 z-[50]">
-            <div class="flex items-center gap-6">
-                <div class="font-black italic uppercase text-xl">KAMI<span class="text-blue-600">OS</span></div>
-                <div class="h-6 w-[1px] bg-white/10"></div>
-                <div class="hidden sm:flex gap-6 text-[10px] font-black uppercase tracking-widest text-slate-500">
-                    <button class="text-white border-b-2 border-blue-600 pb-1">Protocols</button>
-                    <button class="hover:text-white transition-all">Analytics</button>
-                    <button class="hover:text-white transition-all">API Manager</button>
-                </div>
-            </div>
-            <div class="flex items-center gap-6">
-                <div class="text-right hidden sm:block">
-                    <p id="userDisplay" class="text-[10px] font-black uppercase text-white tracking-widest"></p>
-                    <p class="text-[9px] font-black text-blue-500 uppercase">Superuser Access</p>
-                </div>
-                <button onclick="logout()" class="p-4 bg-red-500/10 text-red-500 rounded-2xl border border-red-500/20 hover:bg-red-500 hover:text-white transition-all uppercase text-[10px] font-black">Disconnect</button>
-            </div>
-        </header>
+    </main>
 
-        <main class="max-w-[1600px] mx-auto p-8 grid grid-cols-12 gap-8">
-            
-            <div class="col-span-12 lg:col-span-3 space-y-6">
-                <div class="glass p-8 rounded-[3rem] neon-border">
-                    <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-6">Network Health</p>
-                    <div class="space-y-6">
-                        <div>
-                            <div class="flex justify-between text-[10px] font-black mb-2 uppercase"><span>Active Nodes</span><span id="countTotal">0</span></div>
-                            <div class="h-1.5 w-full bg-white/5 rounded-full"><div class="h-full bg-blue-600 rounded-full w-[45%]"></div></div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-[10px] font-black mb-2 uppercase"><span>Traffic Volume</span><span>142k</span></div>
-                            <div class="h-1.5 w-full bg-white/5 rounded-full"><div class="h-full bg-emerald-500 rounded-full w-[85%]"></div></div>
-                        </div>
-                    </div>
-                </div>
+    <footer class="fixed bottom-12 w-full text-center">
+        <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-700">
+            Follow @KamiBot for live updates
+        </p>
+    </footer>
 
-                <div class="glass p-8 rounded-[3rem]">
-                    <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Traffic Heatmap</p>
-                    <canvas id="miniChart" height="200"></canvas>
-                </div>
-            </div>
-
-            <div class="col-span-12 lg:col-span-6 space-y-8">
-                <div class="glass p-10 rounded-[4rem]">
-                    <h2 class="text-xs font-black uppercase tracking-[0.4em] mb-8 flex items-center gap-3">
-                        <span class="w-2 h-2 rounded-full bg-blue-500"></span> New Protocol Initialization
-                    </h2>
-                    <div class="space-y-4">
-                        <input type="url" id="longUrl" placeholder="TARGET_DESTINATION (HTTPS://...)" class="w-full bg-black/40 p-6 rounded-3xl border border-white/5 outline-none focus:border-blue-500 transition-all font-bold text-sm">
-                        
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-black/40 p-5 rounded-3xl border border-white/5 flex items-center">
-                                <span class="text-[9px] font-black text-slate-500 uppercase pr-3">Region</span>
-                                <select class="bg-transparent text-xs font-bold uppercase outline-none flex-1"><option>Global (Edge)</option><option>US-East</option><option>EU-West</option></select>
-                            </div>
-                            <div id="adminPanel" class="hidden bg-blue-500/5 p-5 rounded-3xl border border-blue-500/20 flex items-center">
-                                <span class="text-[9px] font-black text-blue-500 uppercase pr-3 italic">Custom_Slug:</span>
-                                <input type="text" id="customSlug" placeholder="ALIAS" class="bg-transparent text-xs font-black uppercase outline-none flex-1 text-white placeholder:text-slate-800">
-                            </div>
-                        </div>
-                        
-                        <button onclick="createLink()" class="w-full bg-white text-black py-6 rounded-3xl font-black uppercase tracking-[0.5em] text-[10px] hover:bg-blue-600 hover:text-white transition-all shadow-2xl">Execute Generation</button>
-                    </div>
-                </div>
-
-                <div id="linksContainer" class="space-y-4 pb-20">
-                    </div>
-            </div>
-
-            <div class="col-span-12 lg:col-span-3 space-y-6">
-                <div class="glass p-8 rounded-[3rem] h-[600px] flex flex-col">
-                    <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-6">Live Stream</p>
-                    <div id="liveLogs" class="space-y-4 flex-1 overflow-y-auto pr-2 mono text-[9px]">
-                        <div class="text-emerald-500">[12:44:02] NEW_REDIRECTION_REQUEST -> ID:4492</div>
-                        <div class="text-slate-500">[12:44:05] SSL_VERIFIED_TARGET_200</div>
-                        <div class="text-blue-500">[12:44:08] HEURISTIC_SCAN_SAFE</div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, GithubAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, setDoc, getDoc, query, where, onSnapshot, doc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-        const firebaseConfig = { 
-            apiKey: "AIzaSyAuTU6BV_uxz56NYiJioV2NJ7Wk_wMhL0g",
-            authDomain: "kamibotclick.firebaseapp.com",
-            projectId: "kamibotclick",
-            storageBucket: "kamibotclick.firebasestorage.app",
-            messagingSenderId: "112587834193",
-            appId: "1:112587834193:web:c3fb8e45f24b874edf8970" 
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        const MASTER_UID = "5kQjEGUB6mXxUhcO1LqZE2VZFon1";
-        let captchaVerified = false;
-
-        window.toggleAuthModal = (s) => { 
-            const m = document.getElementById('authOverlay');
-            m.style.opacity = s ? '1' : '0'; m.style.pointerEvents = s ? 'auto' : 'none';
-        };
-
-        window.onCaptchaVerified = () => { captchaVerified = true; checkRequirements(); };
-        window.checkRequirements = () => {
-            const ok = document.getElementById('legalAgree').checked && captchaVerified;
-            ['googleBtn', 'githubBtn'].forEach(id => document.getElementById(id).disabled = !ok);
-        };
-
-        onAuthStateChanged(auth, (user) => {
-            const landing = document.getElementById('landingPage');
-            const dash = document.getElementById('dashboard');
-            if (user) {
-                landing.classList.add('hidden'); dash.classList.remove('hidden');
-                toggleAuthModal(false);
-                document.getElementById('userDisplay').innerText = user.email || "Operator";
-                document.getElementById('adminPanel').classList.toggle('hidden', user.uid !== MASTER_UID);
-                loadLinks(user.uid);
-                initChart();
-            } else {
-                landing.classList.remove('hidden'); dash.classList.add('hidden');
-            }
-        });
-
-        window.createLink = async () => {
-            const urlIn = document.getElementById('longUrl');
-            const customIn = document.getElementById('customSlug');
-            let target = urlIn.value.trim();
-            if(!target) return;
-            if (!/^https?:\/\//i.test(target)) target = 'https://' + target;
-
-            let slug = Math.random().toString(36).substring(2, 8);
-            if (auth.currentUser.uid === MASTER_UID && customIn.value.trim()) {
-                slug = customIn.value.trim().toLowerCase().replace(/[^a-z0-9-_]/g, '');
-            }
-
-            try {
-                await setDoc(doc(db, "links", slug), {
-                    target, slug, userId: auth.currentUser.uid, clicks: 0, createdAt: serverTimestamp()
-                });
-                urlIn.value = ''; customIn.value = '';
-            } catch (e) { alert("Execution Failure"); }
-        };
-
-        function loadLinks(uid) {
-            const q = query(collection(db, "links"), where("userId", "==", uid));
-            onSnapshot(q, (snap) => {
-                const container = document.getElementById('linksContainer');
-                document.getElementById('countTotal').innerText = snap.size;
-                container.innerHTML = '';
-                if(snap.empty) {
-                    container.innerHTML = `<div class="p-40 text-center glass rounded-[4rem] text-[10px] font-black uppercase opacity-20 tracking-[1em]">Zero_Nodes_Active</div>`;
-                    return;
-                }
-                snap.forEach((d) => {
-                    const data = d.data();
-                    const shortUrl = `${window.location.origin}/go/${data.slug}`;
-                    container.innerHTML += `
-                        <div class="glass p-8 rounded-[3rem] flex items-center justify-between group hover:border-blue-500/20 transition-all">
-                            <div class="flex-1 min-w-0 pr-8">
-                                <div class="flex items-center gap-3 mb-2">
-                                    <span class="text-blue-500 font-black text-[10px] uppercase">/${data.slug}</span>
-                                    <span class="h-1 w-1 rounded-full bg-white/20"></span>
-                                    <span class="text-slate-600 font-bold text-[9px] uppercase truncate">${data.target}</span>
-                                </div>
-                                <h4 class="text-white font-bold text-lg truncate tracking-tight">${shortUrl}</h4>
-                            </div>
-                            <div class="flex gap-3">
-                                <button onclick="navigator.clipboard.writeText('${shortUrl}')" class="bg-white text-black px-8 py-3 rounded-2xl font-black uppercase text-[9px] hover:bg-blue-600 hover:text-white transition-all">Copy</button>
-                                <button onclick="deleteDoc(doc(db, 'links', '${data.slug}'))" class="p-4 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-2xl transition-all border border-red-500/10">✕</button>
-                            </div>
-                        </div>`;
-                });
-            });
-        }
-
-        function initChart() {
-            const ctx = document.getElementById('miniChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
-                    datasets: [{
-                        label: 'Requests',
-                        data: [12, 19, 3, 5, 2, 30],
-                        borderColor: '#2563eb',
-                        borderWidth: 3,
-                        tension: 0.4,
-                        fill: true,
-                        backgroundColor: 'rgba(37, 99, 235, 0.1)'
-                    }]
-                },
-                options: {
-                    plugins: { legend: { display: false } },
-                    scales: { y: { display: false }, x: { grid: { display: false }, ticks: { color: '#475569', font: { size: 9, family: 'JetBrains Mono' } } } }
-                }
-            });
-        }
-
-        window.loginGoogle = () => signInWithPopup(auth, new GoogleAuthProvider());
-        window.loginGithub = () => signInWithPopup(auth, new GithubAuthProvider());
-        window.logout = () => signOut(auth);
-    </script>
 </body>
 </html>
